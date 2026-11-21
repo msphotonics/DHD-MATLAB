@@ -201,8 +201,10 @@ psrg_report('Point source', U_S_pt_fine, U_R_cell, S, K, m_S_pt, m_R, holoMaxDN_
 fig1 = make_figure(figW,figH2);
 t1   = tiledlayout(fig1,2,2,'TileSpacing','compact','Padding','compact');
 cH_pt = max(abs(dH0_pt_ideal(:,:,1)),[],'all');
-show_holo(t1,uPix,uPix,dH0_pt_ideal(:,:,1),cH_pt,labNx,labNy,cbHolo0, '(a)');
-show_holo(t1,uPix,uPix,dH0_pt(:,:,1),      cH_pt,labNx,labNy,cbHoloN0,'(b)');
+ax_ = show_holo(t1,uPix,uPix,dH0_pt_ideal(:,:,1),cH_pt,labNx,labNy,cbHolo0, '(a)');
+add_zoom_inset(ax_,uPix,uPix,dH0_pt_ideal(:,:,1),[-8 8],[-8 8],[40 124],[40 124]);
+ax_ = show_holo(t1,uPix,uPix,dH0_pt(:,:,1),      cH_pt,labNx,labNy,cbHoloN0,'(b)');
+add_zoom_inset(ax_,uPix,uPix,dH0_pt(:,:,1),[-8 8],[-8 8],[40 124],[40 124]);
 USe_pt_disp = align_global_phase(quad_phase_remove(U_S_pt), USe_pt, true(N));
 show_amp  (t1,uPix,uPix,abs(USe_pt_disp),[],labNx,labNy,cbAmpUSe,'(c)');
 show_phase(t1,uPix,uPix,USe_pt_disp,    [],labNx,labNy,cbPhzUSe,'(d)');
@@ -268,8 +270,10 @@ psrg_report('Bulls-eye', U_S_be_fine, U_R_cell, S, K, m_S_be, m_R, holoMaxDN_be,
 fig3 = make_figure(figW,figH2);
 t3   = tiledlayout(fig3,2,2,'TileSpacing','compact','Padding','compact');
 cH_be = max(abs(dH0_be_ideal(:,:,1)),[],'all');
-show_holo(t3,uPix,uPix,dH0_be_ideal(:,:,1),cH_be,labNx,labNy,cbHolo0, '(a)');
-show_holo(t3,uPix,uPix,dH0_be(:,:,1),      cH_be,labNx,labNy,cbHoloN0,'(b)');
+ax_ = show_holo(t3,uPix,uPix,dH0_be_ideal(:,:,1),cH_be,labNx,labNy,cbHolo0, '(a)');
+add_zoom_inset(ax_,uPix,uPix,dH0_be_ideal(:,:,1),[-48 -32],[-48 -32],[50 124],[50 124]);
+ax_ = show_holo(t3,uPix,uPix,dH0_be(:,:,1),      cH_be,labNx,labNy,cbHoloN0,'(b)');
+add_zoom_inset(ax_,uPix,uPix,dH0_be(:,:,1),[-48 -32],[-48 -32],[50 124],[50 124]);
 USe_be_disp = align_global_phase(quad_phase_remove(U_S_be), USe_be, true(N));
 show_amp  (t3,uPix,uPix,abs(USe_be_disp),[],labNx,labNy,cbAmpUSe,'(c)');
 show_phase(t3,uPix,uPix,USe_be_disp,    [],labNx,labNy,cbPhzUSe,'(d)');

@@ -196,8 +196,10 @@ t1   = tiledlayout(fig1,2,2,'TileSpacing','compact','Padding','compact');
 zi = centered_indices(N,2*holoZoom);
 cH = max(abs([dH0_pt_ideal(zi,zi); dH0_pt(zi,zi)]),[],'all');
 
-show_holo (t1,uPix(zi),uPix(zi),dH0_pt_ideal(zi,zi),cH,labNx,labNy,cbHolo, '(a)');
-show_holo (t1,uPix(zi),uPix(zi),dH0_pt(zi,zi),      cH,labNx,labNy,cbHoloN,'(b)');
+ax_ = show_holo(t1,uPix(zi),uPix(zi),dH0_pt_ideal(zi,zi),cH,labNx,labNy,cbHolo, '(a)');
+add_zoom_inset(ax_,uPix(zi),uPix(zi),dH0_pt_ideal(zi,zi),[-8 8],[-8 8],[12 46],[12 46]);
+ax_ = show_holo(t1,uPix(zi),uPix(zi),dH0_pt(zi,zi),      cH,labNx,labNy,cbHoloN,'(b)');
+add_zoom_inset(ax_,uPix(zi),uPix(zi),dH0_pt(zi,zi),[-8 8],[-8 8],[12 46],[12 46]);
 show_fourier_db   (t1,uFour,F_pt,q_I,dBmin,cbFourDB, '(c)');
 show_fourier_phase(t1,uFour,F_pt,q_I,       cbFourPhz,'(d)');
 
@@ -287,8 +289,10 @@ t3   = tiledlayout(fig3,2,2,'TileSpacing','compact','Padding','compact');
 
 cHb = max(abs([dH0_b_ideal;dH0_b]),[],'all');
 
-show_holo (t3,uPix,uPix,dH0_b_ideal,cHb,labNx,labNy,cbHolo, '(a)');
-show_holo (t3,uPix,uPix,dH0_b,      cHb,labNx,labNy,cbHoloN,'(b)');
+ax_ = show_holo(t3,uPix,uPix,dH0_b_ideal,cHb,labNx,labNy,cbHolo, '(a)');
+add_zoom_inset(ax_,uPix,uPix,dH0_b_ideal,[-48 -32],[-48 -32],[50 124],[50 124]);
+ax_ = show_holo(t3,uPix,uPix,dH0_b,      cHb,labNx,labNy,cbHoloN,'(b)');
+add_zoom_inset(ax_,uPix,uPix,dH0_b,[-48 -32],[-48 -32],[50 124],[50 124]);
 show_fourier_db   (t3,uFour,F_b,q_I,dBmin,cbFourDB, '(c)');
 show_fourier_phase(t3,uFour,F_b,q_I,       cbFourPhz,'(d)');
 
