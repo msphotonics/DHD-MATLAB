@@ -58,6 +58,9 @@
 
 clear; close all; clc;
 
+% Run from this script's folder, so ../functions and ../outputs resolve
+% wherever MATLAB's current folder happens to be
+cd(fileparts(mfilename('fullpath')));
 addpath('../functions');
 
 % ------------------------------------------------------------

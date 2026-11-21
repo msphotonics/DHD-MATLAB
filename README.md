@@ -23,7 +23,7 @@ Appendix C of the chapter.
    script_IPRG_illustrative
    ```
 
-Each script adds `../functions` to the path, prints its results to the
+Each script changes to its own folder, adds `../functions` to the path, prints its results to the
 command window, and saves its figures (`.pdf` and `.png`) and results (`.mat`)
 to `../outputs/`.
 

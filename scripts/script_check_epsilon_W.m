@@ -24,6 +24,9 @@
 % pupil plane); the field-sample values are printed for reference.
 
 clear; close all; clc;
+% Run from this script's folder, so ../functions and ../outputs resolve
+% wherever MATLAB's current folder happens to be
+cd(fileparts(mfilename('fullpath')));
 addpath('../functions');
 if exist('rng','file'), rng(1); else, rand('seed',1); randn('seed',1); end %#ok<RAND>
 
