@@ -1,4 +1,4 @@
-function show_holo(t, xv, yv, H, c, xlab, ylab, cbLab, panel)
+function ax = show_holo(t, xv, yv, H, c, xlab, ylab, cbLab, panel)
 % SHOW_HOLO  Display a zero-mean hologram with symmetric DN scaling.
 %   SHOW_HOLO(T, XV, YV, H, C, XLAB, YLAB, CBLAB, PANEL) adds a tile
 %   to the tiled layout T showing the integer-DN hologram H with color

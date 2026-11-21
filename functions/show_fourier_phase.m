@@ -1,4 +1,4 @@
-function show_fourier_phase(t, uF, F, q, cbLab, panel, useSquare)
+function show_fourier_phase(t, uF, F, q, cbLab, panel, useSquare, xlab, ylab)
 % SHOW_FOURIER_PHASE  Display Fourier-plane phase with overlays.
 %   SHOW_FOURIER_PHASE(T, UF, F, Q, CBLAB, PANEL) adds a tile to
 %   the tiled layout T showing the wrapped phase of F over [-pi, pi],
@@ -11,8 +11,12 @@ function show_fourier_phase(t, uF, F, q, cbLab, panel, useSquare)
 %       q      - Sampling quotient (q_I or q_P)
 %       cbLab  - Colorbar label (LaTeX)
 %       panel  - Panel letter string, e.g. '(f)'
+%       useSquare - (optional) square instead of circular sideband markers
+%       xlab, ylab - (optional) axis labels; default '$x_1/D$', '$y_1/D$'
 
-ax            = base_axes(t, uF, uF, angle(F), '$x_1/D$', '$y_1/D$', panel);
+if nargin < 8 || isempty(xlab), xlab = '$x_1/D$'; end
+if nargin < 9 || isempty(ylab), ylab = '$y_1/D$'; end
+ax            = base_axes(t, uF, uF, angle(F), xlab, ylab, panel);
 clim(ax, [-pi, pi]);
 cb            = colorbar(ax);
 cb.Ticks      = [-pi, 0, pi];

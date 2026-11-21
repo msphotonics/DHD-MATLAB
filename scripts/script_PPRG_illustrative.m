@@ -40,7 +40,7 @@ enforceWellDepth = true;
 usePoisson = license('test','statistics_toolbox');
 
 dBmin = -80;
-figW = 6.5;  figH3 = 6.5;  figH2 = 5.0;  fontSize = 10;
+figW = 6.5;  figH3 = 6.5;  figH2 = 5.0;  figH1 = 2.7;  fontSize = 10;
 exportFigures = true;  saveResults = true;
 
 set(groot,'defaultTextInterpreter','latex', ...
@@ -110,12 +110,17 @@ sigma_n2_full = @(mS) mS + sigma_n2;
 uPup  = x1/D;
 uPix  = (0:N-1)-N/2;
 uFour = ((0:M-1)-M/2)/N;        % x_1/D for Fourier plane
-uIe   = ((0:N-1)-N/2)*q_P/N;   % x_2/D for image-plane estimate (N×N at q_P*delta)
+uIe   = ((0:N-1)-N/2)/N;       % x_2/W for the N x N image-plane estimate (spacing W/N)
 
 labPx='$x_1/D$'; labPy='$y_1/D$';
 labNx='$x_1/p$'; labNy='$y_1/p$';
-labIx='$x_2/D$'; labIy='$y_2/D$';
+labIx='$x_2/W$'; labIy='$y_2/W$';
 labWx='$x/W$';   labWy='$y/W$';
+
+% Hologram zoom insets (pixel units): a 16 x 16-pixel region inside the
+% pupil is magnified in the upper-right corner to show the off-axis fringes
+zoomX  = [-48 -32];  zoomY  = [-48 -32];
+insetX = [ 50 124];  insetY = [ 50 124];
 
 cbAmpUP  = '$|U_\mathrm{P}|\;(\mathrm{norm.})$';
 cbPhzUP  = '$\angle U_\mathrm{P}\;(\mathrm{rad})$';
@@ -183,23 +188,21 @@ offaxis_report('Point source',U_S_pt_fine,U_R_fine,K,m_S_point,m_R,mH_pt,holoMax
 U_P_est_pt_a = align_global_phase(P_coarse,U_P_est_pt,pupilMask);
 
 % Figure 1 (3x2): hologram and Fourier plane
-fig1 = make_figure(figW,figH3);
-t1   = tiledlayout(fig1,3,2,'TileSpacing','compact','Padding','compact');
+fig1 = make_figure(figW,figH2);
+t1   = tiledlayout(fig1,2,2,'TileSpacing','compact','Padding','compact');
 cH   = max(abs([dH0_pt_ideal;dH0_pt]),[],'all');
-show_holo(t1,uPix,uPix,dH0_pt_ideal,cH,labNx,labNy,cbHolo, '(a)');
-show_holo(t1,uPix,uPix,dH0_pt,      cH,labNx,labNy,cbHoloN,'(b)');
-show_fourier_db   (t1,uFour,F_pt,q_P,dBmin,cbFourDB, '(c)',true);
-show_fourier_phase(t1,uFour,F_pt,q_P,       cbFourPhz,'(d)',true);
-show_amp  (t1,uIe,uIe,abs(UIe_pt),[],labIx,labIy,cbAmpUIe,'(e)');
-show_phase(t1,uIe,uIe,UIe_pt,    [],labIx,labIy,cbPhzUIe,'(f)');
+ax1a = show_holo(t1,uPix,uPix,dH0_pt_ideal,cH,labNx,labNy,cbHolo, '(a)');
+add_zoom_inset(ax1a,uPix,uPix,dH0_pt_ideal,zoomX,zoomY,insetX,insetY);
+ax1b = show_holo(t1,uPix,uPix,dH0_pt,      cH,labNx,labNy,cbHoloN,'(b)');
+add_zoom_inset(ax1b,uPix,uPix,dH0_pt,zoomX,zoomY,insetX,insetY);
+show_fourier_db   (t1,uFour,F_pt,q_P,dBmin,cbFourDB, '(c)',true,labIx,labIy);
+show_fourier_phase(t1,uFour,F_pt,q_P,       cbFourPhz,'(d)',true,labIx,labIy);
 
 % Figure 2 (2x2): pupil truth vs. estimate
-fig2 = make_figure(figW,figH2);
-t2   = tiledlayout(fig2,2,2,'TileSpacing','compact','Padding','compact');
-show_amp  (t2,uPup,uPup,abs(P_coarse),      pupilMask,labPx,labPy,cbAmpUP, '(a)');
-show_phase(t2,uPup,uPup,P_coarse,           pupilMask,labPx,labPy,cbPhzUP, '(b)');
-show_amp  (t2,uPup,uPup,abs(U_P_est_pt_a),  pupilMask,labPx,labPy,cbAmpUPe,'(c)');
-show_phase(t2,uPup,uPup,U_P_est_pt_a,       pupilMask,labPx,labPy,cbPhzUPe,'(d)');
+fig2 = make_figure(figW,figH1);
+t2   = tiledlayout(fig2,1,2,'TileSpacing','compact','Padding','compact');
+show_phase(t2,uPup,uPup,P_coarse,           pupilMask,labPx,labPy,cbPhzUP, '(a)');
+show_phase(t2,uPup,uPup,U_P_est_pt_a,       pupilMask,labPx,labPy,cbPhzUPe,'(b)');
 
 % ============================================================
 % PART II: EXTENDED BULLS-EYE OBJECT
@@ -261,23 +264,21 @@ objMask = double(O ~= 0);
 uObj_coarse = x1/D;
 
 % Figure 3 (3x2): bulls-eye hologram and Fourier plane
-fig3 = make_figure(figW,figH3);
-t3   = tiledlayout(fig3,3,2,'TileSpacing','compact','Padding','compact');
+fig3 = make_figure(figW,figH2);
+t3   = tiledlayout(fig3,2,2,'TileSpacing','compact','Padding','compact');
 cHb  = max(abs([dH0_b_ideal;dH0_b]),[],'all');
-show_holo(t3,uPix,uPix,dH0_b_ideal,cHb,labNx,labNy,cbHolo, '(a)');
-show_holo(t3,uPix,uPix,dH0_b,      cHb,labNx,labNy,cbHoloN,'(b)');
-show_fourier_db   (t3,uFour,F_b,q_P,dBmin,cbFourDB, '(c)',true);
-show_fourier_phase(t3,uFour,F_b,q_P,       cbFourPhz,'(d)',true);
-show_amp  (t3,uIe,uIe,abs(UIe_b),[],labIx,labIy,cbAmpUIe,'(e)');
-show_phase(t3,uIe,uIe,UIe_b,    [],labIx,labIy,cbPhzUIe,'(f)');
+ax3a = show_holo(t3,uPix,uPix,dH0_b_ideal,cHb,labNx,labNy,cbHolo, '(a)');
+add_zoom_inset(ax3a,uPix,uPix,dH0_b_ideal,zoomX,zoomY,insetX,insetY);
+ax3b = show_holo(t3,uPix,uPix,dH0_b,      cHb,labNx,labNy,cbHoloN,'(b)');
+add_zoom_inset(ax3b,uPix,uPix,dH0_b,zoomX,zoomY,insetX,insetY);
+show_fourier_db   (t3,uFour,F_b,q_P,dBmin,cbFourDB, '(c)',true,labIx,labIy);
+show_fourier_phase(t3,uFour,F_b,q_P,       cbFourPhz,'(d)',true,labIx,labIy);
 
 % Figure 4 (2x2): object, truth image, estimated image
-fig4 = make_figure(figW,figH2);
-t4   = tiledlayout(fig4,2,2,'TileSpacing','compact','Padding','compact');
-show_amp  (t4,uObj_coarse,uObj_coarse,abs(R_O),[],      labWx,labWy,cbAmpRO, '(a)');
-show_phase(t4,uObj_coarse,uObj_coarse,R_O,     objMask, labWx,labWy,cbPhzRO, '(b)');
-show_amp  (t4,uObj_fine,  uObj_fine,  Itru,    [],      labWx,labWy,cbIrrUI, '(c)');
-show_amp  (t4,uObj_est,   uObj_est,   Iest,    [],      labWx,labWy,cbIrrUIe,'(d)');
+fig4 = make_figure(figW,figH1);
+t4   = tiledlayout(fig4,1,2,'TileSpacing','compact','Padding','compact');
+show_amp  (t4,uObj_fine,  uObj_fine,  Itru,    [],      labWx,labWy,cbIrrUI, '(a)');
+show_amp  (t4,uObj_est,   uObj_est,   Iest,    [],      labWx,labWy,cbIrrUIe,'(b)');
 
 % ------------------------------------------------------------
 % Export

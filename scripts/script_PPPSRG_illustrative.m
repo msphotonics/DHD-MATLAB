@@ -98,7 +98,7 @@ U_ref_only = reference_only_pppsrg(U_R_cell, sigma_r, ell, g_AD, nBits, K);
 % ============================================================
 % Figure formatting
 % ============================================================
-figW=6.5; figH3=6.5; figH2=5.0; fontSize=10;
+figW=6.5; figH3=6.5; figH2=5.0; figH1=2.7; fontSize=10;
 
 set(groot,'defaultTextInterpreter','latex', ...
     'defaultAxesTickLabelInterpreter','latex', ...
@@ -160,22 +160,18 @@ psrg_report('Point source', U_S_pt_fine, U_R_cell, S, K, m_S_pt, m_R, holoMaxDN_
 
 USe_pt_a = align_global_phase(P_coarse, USe_pt, pupilMask);
 
-fig1 = make_figure(figW,figH3);
-t1   = tiledlayout(fig1,3,2,'TileSpacing','compact','Padding','compact');
+fig1 = make_figure(figW,figH2);
+t1   = tiledlayout(fig1,2,2,'TileSpacing','compact','Padding','compact');
 cH_pt = max(abs(dH0_pt_ideal(:,:,1:2)),[],'all');
 show_holo(t1,uPix,uPix,dH0_pt_ideal(:,:,1),cH_pt,labNx,labNy,cbHolo0,  '(a)');
 show_holo(t1,uPix,uPix,dH0_pt_ideal(:,:,2),cH_pt,labNx,labNy,cbHoloPi2,'(b)');
 show_holo(t1,uPix,uPix,dH0_pt(:,:,1),      cH_pt,labNx,labNy,cbHoloN0, '(c)');
 show_holo(t1,uPix,uPix,dH0_pt(:,:,2),      cH_pt,labNx,labNy,cbHoloNPi2,'(d)');
-show_amp  (t1,uPix,uPix,abs(USe_pt_a),pupilMask,labNx,labNy,cbAmpUSe,'(e)');
-show_phase(t1,uPix,uPix,USe_pt_a,     pupilMask,labNx,labNy,cbPhzUSe,'(f)');
 
-fig2 = make_figure(figW,figH2);
-t2   = tiledlayout(fig2,2,2,'TileSpacing','compact','Padding','compact');
-show_amp  (t2,uPup,uPup,abs(P_coarse), pupilMask,labPx,labPy,cbAmpUP, '(a)');
-show_phase(t2,uPup,uPup,P_coarse,      pupilMask,labPx,labPy,cbPhzUP, '(b)');
-show_amp  (t2,uPup,uPup,abs(USe_pt_a), pupilMask,labPx,labPy,cbAmpUSe,'(c)');
-show_phase(t2,uPup,uPup,USe_pt_a,      pupilMask,labPx,labPy,cbPhzUSe,'(d)');
+fig2 = make_figure(figW,figH1);
+t2   = tiledlayout(fig2,1,2,'TileSpacing','compact','Padding','compact');
+show_phase(t2,uPup,uPup,P_coarse,      pupilMask,labPx,labPy,cbPhzUP, '(a)');
+show_phase(t2,uPup,uPup,USe_pt_a,      pupilMask,labPx,labPy,cbPhzUSe,'(b)');
 
 % ============================================================
 % PART II: EXTENDED BULLS-EYE OBJECT
@@ -219,15 +215,13 @@ psrg_report('Bulls-eye', U_S_be_fine, U_R_cell, S, K, m_S_be, m_R, holoMaxDN_be,
 
 USe_be_a = align_global_phase(U_P_be_coarse, USe_be, pupilMask);
 
-fig3 = make_figure(figW,figH3);
-t3   = tiledlayout(fig3,3,2,'TileSpacing','compact','Padding','compact');
+fig3 = make_figure(figW,figH2);
+t3   = tiledlayout(fig3,2,2,'TileSpacing','compact','Padding','compact');
 cH_be = max(abs(dH0_be_ideal(:,:,1:2)),[],'all');
 show_holo(t3,uPix,uPix,dH0_be_ideal(:,:,1),cH_be,labNx,labNy,cbHolo0,  '(a)');
 show_holo(t3,uPix,uPix,dH0_be_ideal(:,:,2),cH_be,labNx,labNy,cbHoloPi2,'(b)');
 show_holo(t3,uPix,uPix,dH0_be(:,:,1),      cH_be,labNx,labNy,cbHoloN0, '(c)');
 show_holo(t3,uPix,uPix,dH0_be(:,:,2),      cH_be,labNx,labNy,cbHoloNPi2,'(d)');
-show_amp  (t3,uPix,uPix,abs(USe_be_a),pupilMask,labNx,labNy,cbAmpUSe,'(e)');
-show_phase(t3,uPix,uPix,USe_be_a,     pupilMask,labNx,labNy,cbPhzUSe,'(f)');
 
 % Fig 4: reflectance (a)(b), truth image (c), estimated image (d)
 % Truth: Fresnel propagate fine-grid pupil -> fine image (Nfine×Nfine)
@@ -243,15 +237,13 @@ ic   = centered_indices(Npad_est, N);
 Iest = Iest_pad(ic,ic); Iest = Iest/max(Iest(:));
 objMask_fine = double(O_fine ~= 0);
 
-fig4 = make_figure(figW,figH2);
-t4   = tiledlayout(fig4,2,2,'TileSpacing','compact','Padding','compact');
+fig4 = make_figure(figW,figH1);
+t4   = tiledlayout(fig4,1,2,'TileSpacing','compact','Padding','compact');
 labWx='$x/W$'; labWy='$y/W$';
 uObj_fine = x1f_vec/D;   % fine grid normalized by W=D
 uObj      = x1_vec/D;    % coarse grid normalized by W=D
-show_amp  (t4,uObj_fine,uObj_fine,abs(R_O_fine),[],        labWx,labWy,cbAmpRO,'(a)');
-show_phase(t4,uObj_fine,uObj_fine,R_O_fine,    objMask_fine,labWx,labWy,cbPhzRO,'(b)');
-show_amp  (t4,uObj_fine,uObj_fine,Itru,[],labWx,labWy,cbIrrUI, '(c)');
-show_amp  (t4,uObj,     uObj,     Iest,[],labWx,labWy,cbIrrUIe,'(d)');
+show_amp  (t4,uObj_fine,uObj_fine,Itru,[],labWx,labWy,cbIrrUI, '(a)');
+show_amp  (t4,uObj,     uObj,     Iest,[],labWx,labWy,cbIrrUIe,'(b)');
 
 exportgraphics(fig1,'../outputs/PPPSRG_pt_holograms.pdf', ...
     'ContentType','vector','BackgroundColor','white');

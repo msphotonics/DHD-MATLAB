@@ -1,4 +1,4 @@
-function show_fourier_db(t, uF, F, q, dBmin, cbLab, panel, useSquare)
+function show_fourier_db(t, uF, F, q, dBmin, cbLab, panel, useSquare, xlab, ylab)
 % SHOW_FOURIER_DB  Display Fourier-plane amplitude in dB with overlays.
 %   SHOW_FOURIER_DB(T, UF, F, Q, DBMIN, CBLAB, PANEL) adds a tile to
 %   the tiled layout T showing 20*log10(|F|/max(|F|)) over [DBMIN, 0]
@@ -17,9 +17,13 @@ function show_fourier_db(t, uF, F, q, dBmin, cbLab, panel, useSquare)
 %       dBmin  - Lower colorbar limit [dB], e.g. -80
 %       cbLab  - Colorbar label (LaTeX)
 %       panel  - Panel letter string, e.g. '(e)'
+%       useSquare - (optional) square instead of circular sideband markers
+%       xlab, ylab - (optional) axis labels; default '$x_1/D$', '$y_1/D$'
 
+if nargin < 9 || isempty(xlab), xlab = '$x_1/D$'; end
+if nargin < 10 || isempty(ylab), ylab = '$y_1/D$'; end
 A  = 20 * log10(abs(F) / max(abs(F(:))) + eps);
-ax = base_axes(t, uF, uF, A, '$x_1/D$', '$y_1/D$', panel);
+ax = base_axes(t, uF, uF, A, xlab, ylab, panel);
 clim(ax, [dBmin, 0]);
 set_cb_label(colorbar(ax), cbLab);
 if nargin < 8, useSquare = false; end

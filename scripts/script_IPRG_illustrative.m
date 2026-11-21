@@ -41,7 +41,7 @@ usePoisson = license('test','statistics_toolbox');
 holoZoom = 48;       % half-width [px] of point-source hologram zoom
 dBmin    = -80;
 
-figW  = 6.5;  figH3 = 6.5;  figH2 = 5.0;
+figW  = 6.5;  figH3 = 6.5;  figH2 = 5.0;  figH1 = 2.7;
 fontSize = 10;
 
 exportFigures = true;
@@ -187,8 +187,8 @@ UPe_pt_a = align_global_phase(U_P_point,UPe_pt,pupilMask);
 % Figure 1 (3x2): point-source hologram and Fourier plane
 % ------------------------------------------------------------
 
-fig1 = make_figure(figW,figH3);
-t1   = tiledlayout(fig1,3,2,'TileSpacing','compact','Padding','compact');
+fig1 = make_figure(figW,figH2);
+t1   = tiledlayout(fig1,2,2,'TileSpacing','compact','Padding','compact');
 
 zi = centered_indices(N,2*holoZoom);
 cH = max(abs([dH0_pt_ideal(zi,zi); dH0_pt(zi,zi)]),[],'all');
@@ -197,20 +197,16 @@ show_holo (t1,uPix(zi),uPix(zi),dH0_pt_ideal(zi,zi),cH,labNx,labNy,cbHolo, '(a)'
 show_holo (t1,uPix(zi),uPix(zi),dH0_pt(zi,zi),      cH,labNx,labNy,cbHoloN,'(b)');
 show_fourier_db   (t1,uFour,F_pt,q_I,dBmin,cbFourDB, '(c)');
 show_fourier_phase(t1,uFour,F_pt,q_I,       cbFourPhz,'(d)');
-show_amp  (t1,uPix,uPix,abs(UPe_pt_a),pupilMask,labNx,labNy,cbAmpUPe,'(e)');
-show_phase(t1,uPix,uPix,UPe_pt_a,     pupilMask,labNx,labNy,cbPhzUPe,'(f)');
 
 % ------------------------------------------------------------
 % Figure 2 (2x2): point-source truth vs. estimate, pupil plane
 % ------------------------------------------------------------
 
-fig2 = make_figure(figW,figH2);
-t2   = tiledlayout(fig2,2,2,'TileSpacing','compact','Padding','compact');
+fig2 = make_figure(figW,figH1);
+t2   = tiledlayout(fig2,1,2,'TileSpacing','compact','Padding','compact');
 
-show_amp  (t2,uPup,uPup,abs(U_P_point),pupilMask,labPx,labPy,cbAmpUP, '(a)');
-show_phase(t2,uPup,uPup,U_P_point,     pupilMask,labPx,labPy,cbPhzUP, '(b)');
-show_amp  (t2,uPup,uPup,abs(UPe_pt_a), pupilMask,labPx,labPy,cbAmpUPe,'(c)');
-show_phase(t2,uPup,uPup,UPe_pt_a,      pupilMask,labPx,labPy,cbPhzUPe,'(d)');
+show_phase(t2,uPup,uPup,U_P_point,     pupilMask,labPx,labPy,cbPhzUP, '(a)');
+show_phase(t2,uPup,uPup,UPe_pt_a,      pupilMask,labPx,labPy,cbPhzUPe,'(b)');
 
 % ============================================================
 % PART II: EXTENDED BULLS-EYE OBJECT
@@ -283,8 +279,8 @@ uObj_coarse = x1/D;
 % Figure 3 (3x2): bulls-eye hologram and Fourier plane
 % ------------------------------------------------------------
 
-fig3 = make_figure(figW,figH3);
-t3   = tiledlayout(fig3,3,2,'TileSpacing','compact','Padding','compact');
+fig3 = make_figure(figW,figH2);
+t3   = tiledlayout(fig3,2,2,'TileSpacing','compact','Padding','compact');
 
 cHb = max(abs([dH0_b_ideal;dH0_b]),[],'all');
 
@@ -292,20 +288,16 @@ show_holo (t3,uPix,uPix,dH0_b_ideal,cHb,labNx,labNy,cbHolo, '(a)');
 show_holo (t3,uPix,uPix,dH0_b,      cHb,labNx,labNy,cbHoloN,'(b)');
 show_fourier_db   (t3,uFour,F_b,q_I,dBmin,cbFourDB, '(c)');
 show_fourier_phase(t3,uFour,F_b,q_I,       cbFourPhz,'(d)');
-show_amp  (t3,uPix,uPix,abs(UPe_b_a),pupilMask,labNx,labNy,cbAmpUPe,'(e)');
-show_phase(t3,uPix,uPix,UPe_b_a,     pupilMask,labNx,labNy,cbPhzUPe,'(f)');
 
 % ------------------------------------------------------------
 % Figure 4 (2x2): bulls-eye truth vs. estimate, image plane
 % ------------------------------------------------------------
 
-fig4 = make_figure(figW,figH2);
-t4   = tiledlayout(fig4,2,2,'TileSpacing','compact','Padding','compact');
+fig4 = make_figure(figW,figH1);
+t4   = tiledlayout(fig4,1,2,'TileSpacing','compact','Padding','compact');
 
-show_amp  (t4,uObj_coarse,uObj_coarse,abs(R_O),[],     labWx,labWy,cbAmpRO, '(a)');
-show_phase(t4,uObj_coarse,uObj_coarse,R_O,    objMask,labWx,labWy,cbPhzRO, '(b)');
-show_amp  (t4,uObj_fine,  uObj_fine,  Itru,   [],     labWx,labWy,cbIrrUI, '(c)');
-show_amp  (t4,uObj_coarse,uObj_coarse,Iest,   [],     labWx,labWy,cbIrrUIe,'(d)');  % N×N crop from padded fft2c
+show_amp  (t4,uObj_fine,  uObj_fine,  Itru,   [],     labWx,labWy,cbIrrUI, '(a)');
+show_amp  (t4,uObj_coarse,uObj_coarse,Iest,   [],     labWx,labWy,cbIrrUIe,'(b)');  % N×N crop from padded fft2c
 
 % ------------------------------------------------------------
 % Export

@@ -119,7 +119,7 @@ U_ref_only = reference_only_ippsrg(U_R_cell, sigma_r, ell, g_AD, nBits, K);
 % ============================================================
 % Figure formatting
 % ============================================================
-figW=6.5; figH3=6.5; figH2=5.0; fontSize=10;
+figW=6.5; figH3=6.5; figH2=5.0; figH1=2.7; fontSize=10;
 
 set(groot,'defaultTextInterpreter','latex', ...
     'defaultAxesTickLabelInterpreter','latex', ...
@@ -195,25 +195,21 @@ psrg_report('Point source', U_S_pt_fine, U_R_cell, S, K, m_S_pt, m_R, holoMaxDN_
     nBits, eta_pt, nz_pt, SNR_pt, sigma_PS2, kappa, SF_pt0, SF_pt);
 
 % Fig 1: holograms and image-plane estimate
-fig1 = make_figure(figW,figH3);
-t1   = tiledlayout(fig1,3,2,'TileSpacing','compact','Padding','compact');
+fig1 = make_figure(figW,figH2);
+t1   = tiledlayout(fig1,2,2,'TileSpacing','compact','Padding','compact');
 cH_pt = max(abs(dH0_pt_ideal(:,:,1:2)),[],'all');
 show_holo(t1,uPix,uPix,dH0_pt_ideal(:,:,1),cH_pt,labNx,labNy,cbHolo0,  '(a)');
 show_holo(t1,uPix,uPix,dH0_pt_ideal(:,:,2),cH_pt,labNx,labNy,cbHoloPi2,'(b)');
 show_holo(t1,uPix,uPix,dH0_pt(:,:,1),      cH_pt,labNx,labNy,cbHoloN0, '(c)');
 show_holo(t1,uPix,uPix,dH0_pt(:,:,2),      cH_pt,labNx,labNy,cbHoloNPi2,'(d)');
 USe_pt_disp = align_global_phase(quad_phase_remove(U_S_pt), USe_pt, true(N));
-show_amp  (t1,uPix,uPix,abs(USe_pt_disp),[],labNx,labNy,cbAmpUSe,'(e)');
-show_phase(t1,uPix,uPix,USe_pt_disp,    [],labNx,labNy,cbPhzUSe,'(f)');
 
 % Fig 2: pupil truth vs pupil estimate
 U_P_est_pt_a = align_global_phase(P_coarse, U_P_est_pt, pupilMask);
-fig2 = make_figure(figW,figH2);
-t2   = tiledlayout(fig2,2,2,'TileSpacing','compact','Padding','compact');
-show_amp  (t2,uPup,uPup,abs(P_coarse),    pupilMask,labPx,labPy,cbAmpUP, '(a)');
-show_phase(t2,uPup,uPup,P_coarse,         pupilMask,labPx,labPy,cbPhzUP, '(b)');
-show_amp  (t2,uPup,uPup,abs(U_P_est_pt_a),pupilMask,labPx,labPy,cbAmpUPe,'(c)');
-show_phase(t2,uPup,uPup,U_P_est_pt_a,     pupilMask,labPx,labPy,cbPhzUPe,'(d)');
+fig2 = make_figure(figW,figH1);
+t2   = tiledlayout(fig2,1,2,'TileSpacing','compact','Padding','compact');
+show_phase(t2,uPup,uPup,P_coarse,         pupilMask,labPx,labPy,cbPhzUP, '(a)');
+show_phase(t2,uPup,uPup,U_P_est_pt_a,     pupilMask,labPx,labPy,cbPhzUPe,'(b)');
 
 % ============================================================
 % PART II: EXTENDED BULLS-EYE OBJECT
@@ -266,16 +262,14 @@ psrg_report('Bulls-eye', U_S_be_fine, U_R_cell, S, K, m_S_be, m_R, holoMaxDN_be,
     nBits, eta_be, nz_be, SNR_be, sigma_PS2, kappa, SF_be0, SF_be);
 
 % Fig 3: bulls-eye holograms and image-plane estimate
-fig3 = make_figure(figW,figH3);
-t3   = tiledlayout(fig3,3,2,'TileSpacing','compact','Padding','compact');
+fig3 = make_figure(figW,figH2);
+t3   = tiledlayout(fig3,2,2,'TileSpacing','compact','Padding','compact');
 cH_be = max(abs(dH0_be_ideal(:,:,1:2)),[],'all');
 show_holo(t3,uPix,uPix,dH0_be_ideal(:,:,1),cH_be,labNx,labNy,cbHolo0,  '(a)');
 show_holo(t3,uPix,uPix,dH0_be_ideal(:,:,2),cH_be,labNx,labNy,cbHoloPi2,'(b)');
 show_holo(t3,uPix,uPix,dH0_be(:,:,1),      cH_be,labNx,labNy,cbHoloN0, '(c)');
 show_holo(t3,uPix,uPix,dH0_be(:,:,2),      cH_be,labNx,labNy,cbHoloNPi2,'(d)');
 USe_be_disp = align_global_phase(quad_phase_remove(U_S_be), USe_be, true(N));
-show_amp  (t3,uPix,uPix,abs(USe_be_disp),[],labNx,labNy,cbAmpUSe,'(e)');
-show_phase(t3,uPix,uPix,USe_be_disp,    [],labNx,labNy,cbPhzUSe,'(f)');
 
 % Fig 4: reflectance (a)(b), truth irradiance (c), estimated irradiance (d)
 Itru = abs(U_I_be_fine).^2;        Itru = Itru/max(Itru(:));
@@ -285,12 +279,10 @@ labWx='$x/W$'; labWy='$y/W$';
 uObj_fine = x2f_vec/D;   % fine grid normalized by W=D
 uObj      = x2_vec/D;    % coarse grid normalized by W=D
 
-fig4 = make_figure(figW,figH2);
-t4   = tiledlayout(fig4,2,2,'TileSpacing','compact','Padding','compact');
-show_amp  (t4,uObj_fine,uObj_fine,abs(R_O_fine),[],     labWx,labWy,cbAmpRO, '(a)');
-show_phase(t4,uObj_fine,uObj_fine,R_O_fine,    objMask, labWx,labWy,cbPhzRO, '(b)');
-show_amp  (t4,uObj_fine,uObj_fine,Itru,[],labWx,labWy,cbIrrUS, '(c)');
-show_amp  (t4,uObj,     uObj,     Iest,[],labWx,labWy,cbIrrUSe,'(d)');
+fig4 = make_figure(figW,figH1);
+t4   = tiledlayout(fig4,1,2,'TileSpacing','compact','Padding','compact');
+show_amp  (t4,uObj_fine,uObj_fine,Itru,[],labWx,labWy,cbIrrUS, '(a)');
+show_amp  (t4,uObj,     uObj,     Iest,[],labWx,labWy,cbIrrUSe,'(b)');
 
 exportgraphics(fig1,'../outputs/IPPSRG_pt_holograms.pdf', ...
     'ContentType','vector','BackgroundColor','white');
