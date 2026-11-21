@@ -5,7 +5,10 @@
 %   (a) amplitude and (b) phase of the bulls-eye object-plane complex
 %       reflectance R_O, and
 %   (c) amplitude and (d) phase of the truth pupil-plane complex field
-%       for the point-source object (the generalized pupil function P).
+%       for the point-source object (the generalized pupil function P), and
+%   (e) amplitude and (f) phase of the truth image-plane complex field
+%       for the bulls-eye object in (a) and (b), i.e., R_O propagated to the
+%       pupil, multiplied by P, and propagated to the image plane.
 %
 % The parameters match the four illustrative scripts. Because each of those
 % scripts calls rng(1) and then draws the isoplanatic phase first, the pupil
@@ -23,11 +26,11 @@ addpath('../functions');
 % ------------------------------------------------------------
 % Parameters (match the illustrative scripts)
 % ------------------------------------------------------------
-N = 256;  K = 2;
-D = 0.30;  W = D;
+N = 256;  K = 2;  q_I = 3;
+D = 0.30;  W = D;  wvl = 1.0e-6;
 phi_rms = 1.0;  phaseCorr = D/10;
 
-figW = 6.5;  figH2 = 5.0;  fontSize = 10;
+figW = 6.5;  figH3 = 6.5;  fontSize = 10;
 exportFigures = true;
 
 set(groot,'defaultTextInterpreter','latex', ...
@@ -43,6 +46,8 @@ set(groot,'defaultTextInterpreter','latex', ...
 Nfine   = K*N;
 delta   = D/N;
 delta_f = delta/K;
+p       = delta;
+z_I     = q_I*D*p/wvl;                     % z_P = z_I (unit magnification)
 xf      = (-Nfine/2:Nfine/2-1)*delta_f;
 [Xf,Yf] = meshgrid(xf,xf);
 
@@ -64,6 +69,13 @@ R_O      = R_O_fine(1:K:end,1:K:end);
 objMask  = double(R_O ~= 0);
 
 % ------------------------------------------------------------
+% Bulls-eye image-plane complex field (object -> pupil -> image),
+% the same propagation as in the illustrative scripts
+% ------------------------------------------------------------
+U_P_b = P_fine.*fresnel_prop_object_to_pupil(R_O_fine,D,delta_f,wvl,z_I);
+U_I_b = fresnel_prop_pupil_to_image(U_P_b,D,delta_f,wvl,z_I);
+
+% ------------------------------------------------------------
 % Figure
 % ------------------------------------------------------------
 x   = (-N/2:N/2-1)*delta;
@@ -74,13 +86,19 @@ cbAmpRO = '$|R_\mathrm{O}|$';
 cbPhzRO = '$\angle R_\mathrm{O}\;(\mathrm{rad})$';
 cbAmpP  = '$|U_\mathrm{P}|\;(\mathrm{norm.})$';
 cbPhzP  = '$\angle U_\mathrm{P}\;(\mathrm{rad})$';
+labIx = '$x/W$';  labIy = '$y/W$';
+uI    = xf/W;                              % fine image-plane grid
+cbAmpI  = '$|U_\mathrm{I}|\;(\mathrm{norm.})$';
+cbPhzI  = '$\angle U_\mathrm{I}\;(\mathrm{rad})$';
 
-fig1 = make_figure(figW,figH2);
-t1   = tiledlayout(fig1,2,2,'TileSpacing','compact','Padding','compact');
+fig1 = make_figure(figW,figH3);
+t1   = tiledlayout(fig1,3,2,'TileSpacing','compact','Padding','compact');
 show_amp  (t1,uO,uO,abs(R_O),[],       labOx,labOy,cbAmpRO,'(a)');
 show_phase(t1,uO,uO,R_O,     objMask,  labOx,labOy,cbPhzRO,'(b)');
 show_amp  (t1,uP,uP,abs(P),  pupilMask,labPx,labPy,cbAmpP, '(c)');
 show_phase(t1,uP,uP,P,       pupilMask,labPx,labPy,cbPhzP, '(d)');
+show_amp  (t1,uI,uI,abs(U_I_b),[],     labIx,labIy,cbAmpI, '(e)');
+show_phase(t1,uI,uI,U_I_b,     [],     labIx,labIy,cbPhzI, '(f)');
 
 if exportFigures
     if ~exist('../outputs','dir'), mkdir('../outputs'); end
