@@ -162,11 +162,11 @@ USe_pt_a = align_global_phase(P_coarse, USe_pt, pupilMask);
 
 fig1 = make_figure(figW,figH2);
 t1   = tiledlayout(fig1,2,2,'TileSpacing','compact','Padding','compact');
-cH_pt = max(abs(dH0_pt_ideal(:,:,1:2)),[],'all');
-show_holo(t1,uPix,uPix,dH0_pt_ideal(:,:,1),cH_pt,labNx,labNy,cbHolo0,  '(a)');
-show_holo(t1,uPix,uPix,dH0_pt_ideal(:,:,2),cH_pt,labNx,labNy,cbHoloPi2,'(b)');
-show_holo(t1,uPix,uPix,dH0_pt(:,:,1),      cH_pt,labNx,labNy,cbHoloN0, '(c)');
-show_holo(t1,uPix,uPix,dH0_pt(:,:,2),      cH_pt,labNx,labNy,cbHoloNPi2,'(d)');
+cH_pt = max(abs(dH0_pt_ideal(:,:,1)),[],'all');
+show_holo(t1,uPix,uPix,dH0_pt_ideal(:,:,1),cH_pt,labNx,labNy,cbHolo0, '(a)');
+show_holo(t1,uPix,uPix,dH0_pt(:,:,1),      cH_pt,labNx,labNy,cbHoloN0,'(b)');
+show_amp  (t1,uPix,uPix,abs(USe_pt_a),pupilMask,labNx,labNy,cbAmpUSe,'(c)');
+show_phase(t1,uPix,uPix,USe_pt_a,     pupilMask,labNx,labNy,cbPhzUSe,'(d)');
 
 fig2 = make_figure(figW,figH1);
 t2   = tiledlayout(fig2,1,2,'TileSpacing','compact','Padding','compact');
@@ -217,11 +217,11 @@ USe_be_a = align_global_phase(U_P_be_coarse, USe_be, pupilMask);
 
 fig3 = make_figure(figW,figH2);
 t3   = tiledlayout(fig3,2,2,'TileSpacing','compact','Padding','compact');
-cH_be = max(abs(dH0_be_ideal(:,:,1:2)),[],'all');
-show_holo(t3,uPix,uPix,dH0_be_ideal(:,:,1),cH_be,labNx,labNy,cbHolo0,  '(a)');
-show_holo(t3,uPix,uPix,dH0_be_ideal(:,:,2),cH_be,labNx,labNy,cbHoloPi2,'(b)');
-show_holo(t3,uPix,uPix,dH0_be(:,:,1),      cH_be,labNx,labNy,cbHoloN0, '(c)');
-show_holo(t3,uPix,uPix,dH0_be(:,:,2),      cH_be,labNx,labNy,cbHoloNPi2,'(d)');
+cH_be = max(abs(dH0_be_ideal(:,:,1)),[],'all');
+show_holo(t3,uPix,uPix,dH0_be_ideal(:,:,1),cH_be,labNx,labNy,cbHolo0, '(a)');
+show_holo(t3,uPix,uPix,dH0_be(:,:,1),      cH_be,labNx,labNy,cbHoloN0,'(b)');
+show_amp  (t3,uPix,uPix,abs(USe_be_a),pupilMask,labNx,labNy,cbAmpUSe,'(c)');
+show_phase(t3,uPix,uPix,USe_be_a,     pupilMask,labNx,labNy,cbPhzUSe,'(d)');
 
 % Fig 4: reflectance (a)(b), truth image (c), estimated image (d)
 % Truth: Fresnel propagate fine-grid pupil -> fine image (Nfine×Nfine)

@@ -197,12 +197,12 @@ psrg_report('Point source', U_S_pt_fine, U_R_cell, S, K, m_S_pt, m_R, holoMaxDN_
 % Fig 1: holograms and image-plane estimate
 fig1 = make_figure(figW,figH2);
 t1   = tiledlayout(fig1,2,2,'TileSpacing','compact','Padding','compact');
-cH_pt = max(abs(dH0_pt_ideal(:,:,1:2)),[],'all');
-show_holo(t1,uPix,uPix,dH0_pt_ideal(:,:,1),cH_pt,labNx,labNy,cbHolo0,  '(a)');
-show_holo(t1,uPix,uPix,dH0_pt_ideal(:,:,2),cH_pt,labNx,labNy,cbHoloPi2,'(b)');
-show_holo(t1,uPix,uPix,dH0_pt(:,:,1),      cH_pt,labNx,labNy,cbHoloN0, '(c)');
-show_holo(t1,uPix,uPix,dH0_pt(:,:,2),      cH_pt,labNx,labNy,cbHoloNPi2,'(d)');
+cH_pt = max(abs(dH0_pt_ideal(:,:,1)),[],'all');
+show_holo(t1,uPix,uPix,dH0_pt_ideal(:,:,1),cH_pt,labNx,labNy,cbHolo0, '(a)');
+show_holo(t1,uPix,uPix,dH0_pt(:,:,1),      cH_pt,labNx,labNy,cbHoloN0,'(b)');
 USe_pt_disp = align_global_phase(quad_phase_remove(U_S_pt), USe_pt, true(N));
+show_amp  (t1,uPix,uPix,abs(USe_pt_disp),[],labNx,labNy,cbAmpUSe,'(c)');
+show_phase(t1,uPix,uPix,USe_pt_disp,    [],labNx,labNy,cbPhzUSe,'(d)');
 
 % Fig 2: pupil truth vs pupil estimate
 U_P_est_pt_a = align_global_phase(P_coarse, U_P_est_pt, pupilMask);
@@ -264,12 +264,12 @@ psrg_report('Bulls-eye', U_S_be_fine, U_R_cell, S, K, m_S_be, m_R, holoMaxDN_be,
 % Fig 3: bulls-eye holograms and image-plane estimate
 fig3 = make_figure(figW,figH2);
 t3   = tiledlayout(fig3,2,2,'TileSpacing','compact','Padding','compact');
-cH_be = max(abs(dH0_be_ideal(:,:,1:2)),[],'all');
-show_holo(t3,uPix,uPix,dH0_be_ideal(:,:,1),cH_be,labNx,labNy,cbHolo0,  '(a)');
-show_holo(t3,uPix,uPix,dH0_be_ideal(:,:,2),cH_be,labNx,labNy,cbHoloPi2,'(b)');
-show_holo(t3,uPix,uPix,dH0_be(:,:,1),      cH_be,labNx,labNy,cbHoloN0, '(c)');
-show_holo(t3,uPix,uPix,dH0_be(:,:,2),      cH_be,labNx,labNy,cbHoloNPi2,'(d)');
+cH_be = max(abs(dH0_be_ideal(:,:,1)),[],'all');
+show_holo(t3,uPix,uPix,dH0_be_ideal(:,:,1),cH_be,labNx,labNy,cbHolo0, '(a)');
+show_holo(t3,uPix,uPix,dH0_be(:,:,1),      cH_be,labNx,labNy,cbHoloN0,'(b)');
 USe_be_disp = align_global_phase(quad_phase_remove(U_S_be), USe_be, true(N));
+show_amp  (t3,uPix,uPix,abs(USe_be_disp),[],labNx,labNy,cbAmpUSe,'(c)');
+show_phase(t3,uPix,uPix,USe_be_disp,    [],labNx,labNy,cbPhzUSe,'(d)');
 
 % Fig 4: reflectance (a)(b), truth irradiance (c), estimated irradiance (d)
 Itru = abs(U_I_be_fine).^2;        Itru = Itru/max(Itru(:));
