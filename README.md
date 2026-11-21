@@ -62,7 +62,7 @@ The `functions` folder holds the shared helpers:
 ## Requirements
 
 - MATLAB R2020b or later (`tiledlayout`, `exportgraphics`).
-- Statistics and Machine Learning Toolbox (optional). With it, shot noise is
+- Statistics and Machine Learning Toolbox (optional). With it, photon noise is
   drawn from a Poisson distribution with `poissrnd`; without it, the scripts
   detect this and use a Gaussian approximation instead.
 

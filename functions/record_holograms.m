@@ -17,7 +17,7 @@ function [mH, dH_ideal, dH_noisy] = record_holograms(U_S_fine, U_R_vec, K, ...
 %                   (spatially uniform reference).
 %       K         - Subpixels per FPA pixel (fine-to-coarse ratio)
 %       sigma_r   - Read-noise std dev [pe]
-%       usePoisson- true -> Poisson shot noise; false -> Gaussian approx
+%       usePoisson- true -> Poisson photon noise; false -> Gaussian approx
 %       ell       - Pixel well depth [pe]
 %       enforceWellDepth - true -> clip at ell before read noise
 %       g_AD      - A/D gain [DN/pe]

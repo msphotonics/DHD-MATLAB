@@ -6,7 +6,7 @@ function dH = quantize_dn(meanPe, g, nBits)
 %   integer, and clipping to the range [0, 2^NBITS - 1].
 %
 %   This models a noiseless (ideal) hologram; use DETECT_DN to
-%   include shot noise, read noise, and well-depth clipping.
+%   include photon noise, read noise, and well-depth clipping.
 %
 %   Inputs:
 %       meanPe  - Mean photoelectron array [pe]

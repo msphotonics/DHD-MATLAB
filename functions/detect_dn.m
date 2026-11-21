@@ -3,7 +3,7 @@ function dH = detect_dn(meanPe, sigma_r, usePoisson, ell, enforceWellDepth, g, n
 %   DH = DETECT_DN(MEANPE, SIGMA_R, USEPOISSON, ELL,
 %                  ENFORCEWELLDEPTH, G, NBITS) simulates the
 %   complete detection chain:
-%       1. Shot noise (Poisson or Gaussian approximation)
+%       1. Photon noise (Poisson or Gaussian approximation)
 %       2. Well-depth clipping (if ENFORCEWELLDEPTH is true)
 %       3. Read noise (zero-mean Gaussian, std = SIGMA_R [pe])
 %       4. A/D conversion: gain G [DN/pe], rounding (quantization
@@ -12,7 +12,7 @@ function dH = detect_dn(meanPe, sigma_r, usePoisson, ell, enforceWellDepth, g, n
 %   Inputs:
 %       meanPe           - Mean photoelectron array [pe]
 %       sigma_r          - Read-noise standard deviation [pe]
-%       usePoisson       - true  -> Poisson shot noise (requires
+%       usePoisson       - true  -> Poisson photon noise (requires
 %                                   Statistics Toolbox)
 %                          false -> Gaussian approximation
 %       ell              - Pixel well depth [pe]
@@ -30,20 +30,20 @@ function dH = detect_dn(meanPe, sigma_r, usePoisson, ell, enforceWellDepth, g, n
 
 meanPe = max(real(meanPe), 0);         % ensure non-negative mean
 
-% Step 1: shot noise
+% Step 1: photon noise
 if usePoisson
-    shot = poissrnd(meanPe);
+    photon = poissrnd(meanPe);
 else
-    shot = meanPe + sqrt(meanPe) .* randn(size(meanPe));
+    photon = meanPe + sqrt(meanPe) .* randn(size(meanPe));
 end
 
 % Step 2: well-depth clipping
 if enforceWellDepth
-    shot = min(shot, ell);
+    photon = min(photon, ell);
 end
 
 % Step 3: read noise
-analog = shot + sigma_r * randn(size(meanPe));
+analog = photon + sigma_r * randn(size(meanPe));
 
 % Step 4: A/D conversion with rounding and clipping
 dH = min(max(round(g * analog), 0), 2^nBits - 1);
