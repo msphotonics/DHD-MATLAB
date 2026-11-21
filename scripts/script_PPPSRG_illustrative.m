@@ -5,9 +5,9 @@
 % (Pupil-Plane Phase-Shifting Recording Geometry)
 %
 % Produces two figures (3x2), saved as PPPSRG_pt and PPPSRG_bulls:
-%   Figure 1: point-source (a),(b) holograms, (c),(d) pupil-plane estimate,
+%   Figure 1: point-source (a),(b) holograms for delta = 0, (c),(d) holograms for delta = pi,
 %             (e),(f) truth vs. estimated pupil-plane phase
-%   Figure 3: bulls-eye (a),(b) holograms, (c),(d) pupil-plane estimate,
+%   Figure 3: bulls-eye (a),(b) holograms for delta = 0, (c),(d) holograms for delta = pi,
 %             (e),(f) truth vs. estimated image-plane irradiance
 %
 % KEY CHARACTERISTICS:
@@ -124,6 +124,8 @@ cbHolo0  ='$d_\mathrm{H}^{(\delta=0)}-\langle d_\mathrm{H}\rangle\;(\mathrm{DN})
 cbHoloPi2='$d_\mathrm{H}^{(\delta=\pi/2)}-\langle d_\mathrm{H}\rangle\;(\mathrm{DN})$';
 cbHoloN0 ='$d_\mathrm{H}^{+(\delta=0)}-\langle d_\mathrm{H}^+\rangle\;(\mathrm{DN})$';
 cbHoloNPi2='$d_\mathrm{H}^{+(\delta=\pi/2)}-\langle d_\mathrm{H}^+\rangle\;(\mathrm{DN})$';
+cbHoloPi ='$d_\mathrm{H}^{(\delta=\pi)}-\langle d_\mathrm{H}\rangle\;(\mathrm{DN})$';
+cbHoloNPi='$d_\mathrm{H}^{+(\delta=\pi)}-\langle d_\mathrm{H}^+\rangle\;(\mathrm{DN})$';
 cbAmpRO  ='$|R_\mathrm{O}|\;(\mathrm{norm.})$';
 cbPhzRO  ='$\angle R_\mathrm{O}\;(\mathrm{rad})$';
 cbIrrUI  ='$|U_\mathrm{I}|^2\;(\mathrm{norm.})$';
@@ -165,13 +167,15 @@ USe_pt_a = align_global_phase(P_coarse, USe_pt, pupilMask);
 
 fig1 = make_figure(figW,figH3);
 t1   = tiledlayout(fig1,3,2,'TileSpacing','compact','Padding','compact');
-cH_pt = max(abs(dH0_pt_ideal(:,:,1)),[],'all');
+cH_pt = max(abs(dH0_pt_ideal(:,:,[1 3])),[],'all');   % delta = 0 and pi
 ax_ = show_holo(t1,uPix,uPix,dH0_pt_ideal(:,:,1),cH_pt,labNx,labNy,cbHolo0, '(a)');
 add_zoom_inset(ax_,uPix,uPix,dH0_pt_ideal(:,:,1),[-48 -32],[-48 -32],[50 124],[50 124]);
 ax_ = show_holo(t1,uPix,uPix,dH0_pt(:,:,1),      cH_pt,labNx,labNy,cbHoloN0,'(b)');
 add_zoom_inset(ax_,uPix,uPix,dH0_pt(:,:,1),[-48 -32],[-48 -32],[50 124],[50 124]);
-show_amp  (t1,uPix,uPix,abs(USe_pt_a),pupilMask,labNx,labNy,cbAmpUSe,'(c)');
-show_phase(t1,uPix,uPix,USe_pt_a,     pupilMask,labNx,labNy,cbPhzUSe,'(d)');
+ax_ = show_holo(t1,uPix,uPix,dH0_pt_ideal(:,:,3),cH_pt,labNx,labNy,cbHoloPi, '(c)');
+add_zoom_inset(ax_,uPix,uPix,dH0_pt_ideal(:,:,3),[-48 -32],[-48 -32],[50 124],[50 124]);
+ax_ = show_holo(t1,uPix,uPix,dH0_pt(:,:,3),      cH_pt,labNx,labNy,cbHoloNPi,'(d)');
+add_zoom_inset(ax_,uPix,uPix,dH0_pt(:,:,3),[-48 -32],[-48 -32],[50 124],[50 124]);
 
 show_phase(t1,uPup,uPup,P_coarse,      pupilMask,labPx,labPy,cbPhzUP, '(e)');
 show_phase(t1,uPup,uPup,USe_pt_a,      pupilMask,labPx,labPy,cbPhzUSe,'(f)');
@@ -220,13 +224,15 @@ USe_be_a = align_global_phase(U_P_be_coarse, USe_be, pupilMask);
 
 fig3 = make_figure(figW,figH3);
 t3   = tiledlayout(fig3,3,2,'TileSpacing','compact','Padding','compact');
-cH_be = max(abs(dH0_be_ideal(:,:,1)),[],'all');
+cH_be = max(abs(dH0_be_ideal(:,:,[1 3])),[],'all');   % delta = 0 and pi
 ax_ = show_holo(t3,uPix,uPix,dH0_be_ideal(:,:,1),cH_be,labNx,labNy,cbHolo0, '(a)');
 add_zoom_inset(ax_,uPix,uPix,dH0_be_ideal(:,:,1),[-48 -32],[-48 -32],[50 124],[50 124]);
 ax_ = show_holo(t3,uPix,uPix,dH0_be(:,:,1),      cH_be,labNx,labNy,cbHoloN0,'(b)');
 add_zoom_inset(ax_,uPix,uPix,dH0_be(:,:,1),[-48 -32],[-48 -32],[50 124],[50 124]);
-show_amp  (t3,uPix,uPix,abs(USe_be_a),pupilMask,labNx,labNy,cbAmpUSe,'(c)');
-show_phase(t3,uPix,uPix,USe_be_a,     pupilMask,labNx,labNy,cbPhzUSe,'(d)');
+ax_ = show_holo(t3,uPix,uPix,dH0_be_ideal(:,:,3),cH_be,labNx,labNy,cbHoloPi, '(c)');
+add_zoom_inset(ax_,uPix,uPix,dH0_be_ideal(:,:,3),[-48 -32],[-48 -32],[50 124],[50 124]);
+ax_ = show_holo(t3,uPix,uPix,dH0_be(:,:,3),      cH_be,labNx,labNy,cbHoloNPi,'(d)');
+add_zoom_inset(ax_,uPix,uPix,dH0_be(:,:,3),[-48 -32],[-48 -32],[50 124],[50 124]);
 
 % Fig 4: reflectance (a)(b), truth image (c), estimated image (d)
 % Truth: Fresnel propagate fine-grid pupil -> fine image (Nfine×Nfine)

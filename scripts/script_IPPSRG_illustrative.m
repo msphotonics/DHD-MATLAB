@@ -5,9 +5,9 @@
 % (Image-Plane Phase-Shifting Recording Geometry)
 %
 % Produces two figures (3x2), saved as IPPSRG_pt and IPPSRG_bulls:
-%   Figure 1: point-source (a),(b) holograms, (c),(d) image-plane estimate,
+%   Figure 1: point-source (a),(b) holograms for delta = 0, (c),(d) holograms for delta = pi,
 %             (e),(f) truth vs. estimated pupil-plane phase
-%   Figure 3: bulls-eye (a),(b) holograms, (c),(d) image-plane estimate,
+%   Figure 3: bulls-eye (a),(b) holograms for delta = 0, (c),(d) holograms for delta = pi,
 %             (e),(f) truth vs. estimated image-plane irradiance
 %
 % KEY CHARACTERISTICS:
@@ -140,6 +140,8 @@ cbHolo0  ='$d_\mathrm{H}^{(\delta=0)}-\langle d_\mathrm{H}\rangle\;(\mathrm{DN})
 cbHoloPi2='$d_\mathrm{H}^{(\delta=\pi/2)}-\langle d_\mathrm{H}\rangle\;(\mathrm{DN})$';
 cbHoloN0 ='$d_\mathrm{H}^{+(\delta=0)}-\langle d_\mathrm{H}^+\rangle\;(\mathrm{DN})$';
 cbHoloNPi2='$d_\mathrm{H}^{+(\delta=\pi/2)}-\langle d_\mathrm{H}^+\rangle\;(\mathrm{DN})$';
+cbHoloPi ='$d_\mathrm{H}^{(\delta=\pi)}-\langle d_\mathrm{H}\rangle\;(\mathrm{DN})$';
+cbHoloNPi='$d_\mathrm{H}^{+(\delta=\pi)}-\langle d_\mathrm{H}^+\rangle\;(\mathrm{DN})$';
 cbAmpUSe ='$|\hat{U}_\mathrm{S}|\;(\mathrm{norm.})$';
 cbPhzUSe ='$\angle\hat{U}_\mathrm{S}\;(\mathrm{rad})$';
 cbAmpUP  ='$|U_\mathrm{P}|\;(\mathrm{norm.})$';
@@ -200,14 +202,16 @@ psrg_report('Point source', U_S_pt_fine, U_R_cell, S, K, m_S_pt, m_R, holoMaxDN_
 % Fig 1: holograms and image-plane estimate
 fig1 = make_figure(figW,figH3);
 t1   = tiledlayout(fig1,3,2,'TileSpacing','compact','Padding','compact');
-cH_pt = max(abs(dH0_pt_ideal(:,:,1)),[],'all');
+cH_pt = max(abs(dH0_pt_ideal(:,:,[1 3])),[],'all');   % delta = 0 and pi
 ax_ = show_holo(t1,uPix,uPix,dH0_pt_ideal(:,:,1),cH_pt,labNx,labNy,cbHolo0, '(a)');
 add_zoom_inset(ax_,uPix,uPix,dH0_pt_ideal(:,:,1),[-8 8],[-8 8],[40 124],[40 124]);
 ax_ = show_holo(t1,uPix,uPix,dH0_pt(:,:,1),      cH_pt,labNx,labNy,cbHoloN0,'(b)');
 add_zoom_inset(ax_,uPix,uPix,dH0_pt(:,:,1),[-8 8],[-8 8],[40 124],[40 124]);
 USe_pt_disp = align_global_phase(quad_phase_remove(U_S_pt), USe_pt, true(N));
-show_amp  (t1,uPix,uPix,abs(USe_pt_disp),[],labNx,labNy,cbAmpUSe,'(c)');
-show_phase(t1,uPix,uPix,USe_pt_disp,    [],labNx,labNy,cbPhzUSe,'(d)');
+ax_ = show_holo(t1,uPix,uPix,dH0_pt_ideal(:,:,3),cH_pt,labNx,labNy,cbHoloPi, '(c)');
+add_zoom_inset(ax_,uPix,uPix,dH0_pt_ideal(:,:,3),[-8 8],[-8 8],[40 124],[40 124]);
+ax_ = show_holo(t1,uPix,uPix,dH0_pt(:,:,3),      cH_pt,labNx,labNy,cbHoloNPi,'(d)');
+add_zoom_inset(ax_,uPix,uPix,dH0_pt(:,:,3),[-8 8],[-8 8],[40 124],[40 124]);
 
 % Fig 2: pupil truth vs pupil estimate
 U_P_est_pt_a = align_global_phase(P_coarse, U_P_est_pt, pupilMask);
@@ -267,14 +271,16 @@ psrg_report('Bulls-eye', U_S_be_fine, U_R_cell, S, K, m_S_be, m_R, holoMaxDN_be,
 % Fig 3: bulls-eye holograms and image-plane estimate
 fig3 = make_figure(figW,figH3);
 t3   = tiledlayout(fig3,3,2,'TileSpacing','compact','Padding','compact');
-cH_be = max(abs(dH0_be_ideal(:,:,1)),[],'all');
+cH_be = max(abs(dH0_be_ideal(:,:,[1 3])),[],'all');   % delta = 0 and pi
 ax_ = show_holo(t3,uPix,uPix,dH0_be_ideal(:,:,1),cH_be,labNx,labNy,cbHolo0, '(a)');
 add_zoom_inset(ax_,uPix,uPix,dH0_be_ideal(:,:,1),[-48 -32],[-48 -32],[50 124],[50 124]);
 ax_ = show_holo(t3,uPix,uPix,dH0_be(:,:,1),      cH_be,labNx,labNy,cbHoloN0,'(b)');
 add_zoom_inset(ax_,uPix,uPix,dH0_be(:,:,1),[-48 -32],[-48 -32],[50 124],[50 124]);
 USe_be_disp = align_global_phase(quad_phase_remove(U_S_be), USe_be, true(N));
-show_amp  (t3,uPix,uPix,abs(USe_be_disp),[],labNx,labNy,cbAmpUSe,'(c)');
-show_phase(t3,uPix,uPix,USe_be_disp,    [],labNx,labNy,cbPhzUSe,'(d)');
+ax_ = show_holo(t3,uPix,uPix,dH0_be_ideal(:,:,3),cH_be,labNx,labNy,cbHoloPi, '(c)');
+add_zoom_inset(ax_,uPix,uPix,dH0_be_ideal(:,:,3),[-48 -32],[-48 -32],[50 124],[50 124]);
+ax_ = show_holo(t3,uPix,uPix,dH0_be(:,:,3),      cH_be,labNx,labNy,cbHoloNPi,'(d)');
+add_zoom_inset(ax_,uPix,uPix,dH0_be(:,:,3),[-48 -32],[-48 -32],[50 124],[50 124]);
 
 % Fig 4: reflectance (a)(b), truth irradiance (c), estimated irradiance (d)
 Itru = abs(U_I_be_fine).^2;        Itru = Itru/max(Itru(:));
