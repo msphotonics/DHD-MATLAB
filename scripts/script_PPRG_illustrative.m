@@ -3,11 +3,11 @@
 %
 % Illustrative examples for the off-axis PPRG (Section 5.5).
 %
-% Produces four figures:
-%   Figure 1 (3x2): point-source hologram and Fourier plane
-%   Figure 2 (2x2): point-source truth vs. estimate, pupil plane
-%   Figure 3 (3x2): bulls-eye hologram and Fourier plane
-%   Figure 4 (2x2): bulls-eye reflectance, truth image, estimated image
+% Produces two figures (3x2), saved as PPRG_pt and PPRG_bulls:
+%   Figure 1: point-source (a),(b) holograms, (c),(d) Fourier plane,
+%             (e),(f) truth vs. estimated pupil-plane phase
+%   Figure 3: bulls-eye (a),(b) holograms, (c),(d) Fourier plane,
+%             (e),(f) truth vs. estimated image-plane irradiance
 %
 % Axis conventions:
 %   pupil plane (FPA):   x_1/p,  y_1/p  (Figs 1,3 a-b)
@@ -191,8 +191,8 @@ offaxis_report('Point source',U_S_pt_fine,U_R_fine,K,m_S_point,m_R,mH_pt,holoMax
 U_P_est_pt_a = align_global_phase(P_coarse,U_P_est_pt,pupilMask);
 
 % Figure 1 (3x2): hologram and Fourier plane
-fig1 = make_figure(figW,figH2);
-t1   = tiledlayout(fig1,2,2,'TileSpacing','compact','Padding','compact');
+fig1 = make_figure(figW,figH3);
+t1   = tiledlayout(fig1,3,2,'TileSpacing','compact','Padding','compact');
 cH   = max(abs([dH0_pt_ideal;dH0_pt]),[],'all');
 ax1a = show_holo(t1,uPix,uPix,dH0_pt_ideal,cH,labNx,labNy,cbHolo, '(a)');
 add_zoom_inset(ax1a,uPix,uPix,dH0_pt_ideal,zoomX,zoomY,insetX,insetY);
@@ -201,11 +201,9 @@ add_zoom_inset(ax1b,uPix,uPix,dH0_pt,zoomX,zoomY,insetX,insetY);
 show_fourier_db   (t1,uFour,F_pt,q_P,dBmin,cbFourDB, '(c)',true,labIx,labIy);
 show_fourier_phase(t1,uFour,F_pt,q_P,       cbFourPhz,'(d)',true,labIx,labIy);
 
-% Figure 2 (2x2): pupil truth vs. estimate
-fig2 = make_figure(figW,figH1);
-t2   = tiledlayout(fig2,1,2,'TileSpacing','compact','Padding','compact');
-show_phase(t2,uPup,uPup,P_coarse,           pupilMask,labPx,labPy,cbPhzUP, '(a)');
-show_phase(t2,uPup,uPup,U_P_est_pt_a,       pupilMask,labPx,labPy,cbPhzUPe,'(b)');
+% (e),(f) of Figure 1: pupil truth vs. estimate
+show_phase(t1,uPup,uPup,P_coarse,           pupilMask,labPx,labPy,cbPhzUP, '(e)');
+show_phase(t1,uPup,uPup,U_P_est_pt_a,       pupilMask,labPx,labPy,cbPhzUPe,'(f)');
 
 % ============================================================
 % PART II: EXTENDED BULLS-EYE OBJECT
@@ -267,8 +265,8 @@ objMask = double(O ~= 0);
 uObj_coarse = x1/D;
 
 % Figure 3 (3x2): bulls-eye hologram and Fourier plane
-fig3 = make_figure(figW,figH2);
-t3   = tiledlayout(fig3,2,2,'TileSpacing','compact','Padding','compact');
+fig3 = make_figure(figW,figH3);
+t3   = tiledlayout(fig3,3,2,'TileSpacing','compact','Padding','compact');
 cHb  = max(abs([dH0_b_ideal;dH0_b]),[],'all');
 ax3a = show_holo(t3,uPix,uPix,dH0_b_ideal,cHb,labNx,labNy,cbHolo, '(a)');
 add_zoom_inset(ax3a,uPix,uPix,dH0_b_ideal,zoomX,zoomY,insetX,insetY);
@@ -277,21 +275,18 @@ add_zoom_inset(ax3b,uPix,uPix,dH0_b,zoomX,zoomY,insetX,insetY);
 show_fourier_db   (t3,uFour,F_b,q_P,dBmin,cbFourDB, '(c)',true,labIx,labIy);
 show_fourier_phase(t3,uFour,F_b,q_P,       cbFourPhz,'(d)',true,labIx,labIy);
 
-% Figure 4 (2x2): object, truth image, estimated image
-fig4 = make_figure(figW,figH1);
-t4   = tiledlayout(fig4,1,2,'TileSpacing','compact','Padding','compact');
-show_amp  (t4,uObj_fine,  uObj_fine,  Itru,    [],      labWx,labWy,cbIrrUI, '(a)');
-show_amp  (t4,uObj_est,   uObj_est,   Iest,    [],      labWx,labWy,cbIrrUIe,'(b)');
+% (e),(f) of Figure 3: object, truth image, estimated image
+show_amp  (t3,uObj_fine,  uObj_fine,  Itru,    [],      labWx,labWy,cbIrrUI, '(e)');
+show_amp  (t3,uObj_est,   uObj_est,   Iest,    [],      labWx,labWy,cbIrrUIe,'(f)');
 
 % ------------------------------------------------------------
 % Export
 % ------------------------------------------------------------
 
 if exportFigures
-    names = {'PPRG_pt_hologram','PPRG_pt_comparison', ...
-             'PPRG_bulls_hologram','PPRG_bulls_comparison'};
-    figs  = [fig1,fig2,fig3,fig4];
-    for n = 1:4
+    names = {'PPRG_pt','PPRG_bulls'};
+    figs  = [fig1,fig3];
+    for n = 1:2
         exportgraphics(figs(n),['../outputs/',names{n},'.pdf'], ...
             'ContentType','vector','BackgroundColor','white');
         exportgraphics(figs(n),['../outputs/',names{n},'.png'],'Resolution',600);

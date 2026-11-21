@@ -4,11 +4,11 @@
 % Illustrative examples for the on-axis PP-PSRG (Section 6.5).
 % (Pupil-Plane Phase-Shifting Recording Geometry)
 %
-% Produces four figures:
-%   Figure 1 (3x2): point-source holograms and pupil estimate
-%   Figure 2 (2x2): point-source truth vs. estimate, pupil plane
-%   Figure 3 (3x2): bulls-eye holograms and pupil estimate
-%   Figure 4 (2x2): bulls-eye reflectance and images
+% Produces two figures (3x2), saved as PPPSRG_pt and PPPSRG_bulls:
+%   Figure 1: point-source (a),(b) holograms, (c),(d) pupil-plane estimate,
+%             (e),(f) truth vs. estimated pupil-plane phase
+%   Figure 3: bulls-eye (a),(b) holograms, (c),(d) pupil-plane estimate,
+%             (e),(f) truth vs. estimated image-plane irradiance
 %
 % KEY CHARACTERISTICS:
 %   - Pupil P generated on fine Nfine×Nfine grid at spacing delta_f = delta/K.
@@ -163,8 +163,8 @@ psrg_report('Point source', U_S_pt_fine, U_R_cell, S, K, m_S_pt, m_R, holoMaxDN_
 
 USe_pt_a = align_global_phase(P_coarse, USe_pt, pupilMask);
 
-fig1 = make_figure(figW,figH2);
-t1   = tiledlayout(fig1,2,2,'TileSpacing','compact','Padding','compact');
+fig1 = make_figure(figW,figH3);
+t1   = tiledlayout(fig1,3,2,'TileSpacing','compact','Padding','compact');
 cH_pt = max(abs(dH0_pt_ideal(:,:,1)),[],'all');
 ax_ = show_holo(t1,uPix,uPix,dH0_pt_ideal(:,:,1),cH_pt,labNx,labNy,cbHolo0, '(a)');
 add_zoom_inset(ax_,uPix,uPix,dH0_pt_ideal(:,:,1),[-48 -32],[-48 -32],[50 124],[50 124]);
@@ -173,10 +173,8 @@ add_zoom_inset(ax_,uPix,uPix,dH0_pt(:,:,1),[-48 -32],[-48 -32],[50 124],[50 124]
 show_amp  (t1,uPix,uPix,abs(USe_pt_a),pupilMask,labNx,labNy,cbAmpUSe,'(c)');
 show_phase(t1,uPix,uPix,USe_pt_a,     pupilMask,labNx,labNy,cbPhzUSe,'(d)');
 
-fig2 = make_figure(figW,figH1);
-t2   = tiledlayout(fig2,1,2,'TileSpacing','compact','Padding','compact');
-show_phase(t2,uPup,uPup,P_coarse,      pupilMask,labPx,labPy,cbPhzUP, '(a)');
-show_phase(t2,uPup,uPup,USe_pt_a,      pupilMask,labPx,labPy,cbPhzUSe,'(b)');
+show_phase(t1,uPup,uPup,P_coarse,      pupilMask,labPx,labPy,cbPhzUP, '(e)');
+show_phase(t1,uPup,uPup,USe_pt_a,      pupilMask,labPx,labPy,cbPhzUSe,'(f)');
 
 % ============================================================
 % PART II: EXTENDED BULLS-EYE OBJECT
@@ -220,8 +218,8 @@ psrg_report('Bulls-eye', U_S_be_fine, U_R_cell, S, K, m_S_be, m_R, holoMaxDN_be,
 
 USe_be_a = align_global_phase(U_P_be_coarse, USe_be, pupilMask);
 
-fig3 = make_figure(figW,figH2);
-t3   = tiledlayout(fig3,2,2,'TileSpacing','compact','Padding','compact');
+fig3 = make_figure(figW,figH3);
+t3   = tiledlayout(fig3,3,2,'TileSpacing','compact','Padding','compact');
 cH_be = max(abs(dH0_be_ideal(:,:,1)),[],'all');
 ax_ = show_holo(t3,uPix,uPix,dH0_be_ideal(:,:,1),cH_be,labNx,labNy,cbHolo0, '(a)');
 add_zoom_inset(ax_,uPix,uPix,dH0_be_ideal(:,:,1),[-48 -32],[-48 -32],[50 124],[50 124]);
@@ -244,26 +242,19 @@ ic   = centered_indices(Npad_est, N);
 Iest = Iest_pad(ic,ic); Iest = Iest/max(Iest(:));
 objMask_fine = double(O_fine ~= 0);
 
-fig4 = make_figure(figW,figH1);
-t4   = tiledlayout(fig4,1,2,'TileSpacing','compact','Padding','compact');
 labWx='$x/W$'; labWy='$y/W$';
 uObj_fine = x1f_vec/D;   % fine grid normalized by W=D
 uObj      = x1_vec/D;    % coarse grid normalized by W=D
-show_amp  (t4,uObj_fine,uObj_fine,Itru,[],labWx,labWy,cbIrrUI, '(a)');
-show_amp  (t4,uObj,     uObj,     Iest,[],labWx,labWy,cbIrrUIe,'(b)');
+show_amp  (t3,uObj_fine,uObj_fine,Itru,[],labWx,labWy,cbIrrUI, '(e)');
+show_amp  (t3,uObj,     uObj,     Iest,[],labWx,labWy,cbIrrUIe,'(f)');
 
-exportgraphics(fig1,'../outputs/PPPSRG_pt_holograms.pdf', ...
-    'ContentType','vector','BackgroundColor','white');
-exportgraphics(fig1,'../outputs/PPPSRG_pt_holograms.png','Resolution',600);
-exportgraphics(fig2,'../outputs/PPPSRG_pt_comparison.pdf', ...
-    'ContentType','vector','BackgroundColor','white');
-exportgraphics(fig2,'../outputs/PPPSRG_pt_comparison.png','Resolution',600);
-exportgraphics(fig3,'../outputs/PPPSRG_bulls_holograms.pdf', ...
-    'ContentType','vector','BackgroundColor','white');
-exportgraphics(fig3,'../outputs/PPPSRG_bulls_holograms.png','Resolution',600);
-exportgraphics(fig4,'../outputs/PPPSRG_bulls_comparison.pdf', ...
-    'ContentType','vector','BackgroundColor','white');
-exportgraphics(fig4,'../outputs/PPPSRG_bulls_comparison.png','Resolution',600);
+names = {'PPPSRG_pt','PPPSRG_bulls'};
+figs  = [fig1,fig3];
+for n = 1:2
+    exportgraphics(figs(n),['../outputs/',names{n},'.pdf'], ...
+        'ContentType','vector','BackgroundColor','white');
+    exportgraphics(figs(n),['../outputs/',names{n},'.png'],'Resolution',600);
+end
 
 % ============================================================
 % Local functions
