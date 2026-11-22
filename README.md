@@ -3,7 +3,7 @@
 MATLAB code for the illustrative examples and the performance comparison in
 
 > M. F. Spencer, "Digital-Holographic Detection," in *Encyclopedia of Modern
-> Optics III*, Elsevier (2026).
+> Optics III*, Elsevier (2027).
 
 The scripts simulate digital-holographic detection with wave optics for four
 recording geometries and compare the measured signal-to-noise ratios (SNRs)
