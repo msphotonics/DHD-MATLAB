@@ -3,13 +3,13 @@
 MATLAB code for the illustrative examples and the performance comparison in
 
 > M. F. Spencer, "Digital-Holographic Detection," in *Encyclopedia of Modern
-> Optics II*, Elsevier (2026).
+> Optics III*, Elsevier (2026).
 
 The scripts simulate digital-holographic detection with wave optics for four
 recording geometries and compare the measured signal-to-noise ratios (SNRs)
 and field-estimated Strehl ratios with the closed-form expressions in the
-chapter. The numerical model and performance metrics are described in
-Appendix C of the chapter.
+chapter. Appendices C and D of the chapter describe the numerical model and
+performance metrics.
 
 ## Getting started
 
@@ -23,9 +23,9 @@ Appendix C of the chapter.
    script_IPRG_illustrative
    ```
 
-Each script changes to its own folder, adds `../functions` to the path, prints its results to the
-command window, and saves its figures (`.pdf` and `.png`) and results (`.mat`)
-to `../outputs/`.
+Each script changes to its own folder, adds `../functions` to the path,
+prints its results to the command window, and saves its figures (`.pdf` and
+`.png`) and results (`.mat`) to `../outputs/`.
 
 ## Scripts
 
@@ -41,7 +41,7 @@ to `../outputs/`.
 
 Each illustrative script runs a point-source object and a bulls-eye
 (extended) object. `script_comparison.m` sweeps 10 SNR values from 0.1 to 100
-with 100 realizations each, which took about 25 minutes on a desktop
+with 100 realizations each and takes about 25 minutes on a desktop
 computer. Reduce `nReals` near the top of the script for a quick check.
 
 ## Functions
@@ -58,14 +58,14 @@ The `functions` folder holds the shared helpers:
 - **Metrics:** `pixel_eta` (total-system efficiency), `field_strehl`,
   `align_global_phase`
 - **Reporting and plotting:** `print_run_header`, `print_object_report`,
-  `make_figure`, `show_*`, `centered_indices`
+  `make_figure`, `show_*`, `add_zoom_inset`, `centered_indices`
 
 ## Requirements
 
 - MATLAB R2020b or later (`tiledlayout`, `exportgraphics`).
-- Statistics and Machine Learning Toolbox (optional). With it, photon noise is
-  drawn from a Poisson distribution with `poissrnd`; without it, the scripts
-  detect this and use a Gaussian approximation instead.
+- Statistics and Machine Learning Toolbox (optional). With it, the scripts
+  draw photon noise from a Poisson distribution with `poissrnd`; without it,
+  they detect its absence and use a Gaussian approximation instead.
 
 ## Citation
 
