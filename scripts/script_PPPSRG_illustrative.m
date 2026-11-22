@@ -18,7 +18,7 @@
 %   - Downsampling of P_fine (every K-th sample) -> N×N pupil truth.
 %   - S_F computed in PUPIL plane between P_coarse and USe.
 %   - Fig 4 images via fft2c of pupil fields (Fourier = image plane).
-%   - Reference-only noise estimate from a fifth recording (S=0).
+%   - Reference-only noise estimate from a fifth recording (U_S = 0).
 %
 % All functions are in ../functions/.
 % ============================================================
@@ -44,7 +44,7 @@ wvl    = 1.0e-6;      % wavelength [m]
 kwave  = 2*pi/wvl;    % angular wavenumber [rad/m]
 q_P    = 3;           % pixels per speckle at pupil plane
 z_P    = q_P*D^2/(N*wvl); % speckle = q_P*delta, same formula as z_I [m]
-S      = 1;           % amplitude splits
+B      = 1;           % amplitude splits (B in the chapter; 1 = sequential)
 sigma_r= 100;         % read-noise std [pe]
 ell    = 100e3;        % well depth [pe]
 m_R    = 0.75*ell;    % reference mean pe
@@ -88,7 +88,7 @@ end
 
 % Closed-form SNR per FPA pixel (m_S = full-FPA mean), with pixel-aperture
 % efficiency eta, consistent with the off-axis geometries.
-snr_theory = @(mS,eta) eta*(4/S)*m_R*mS/sigma_n2;
+snr_theory = @(mS,eta) eta*(4/B)*m_R*mS/sigma_n2;
 % S_F is evaluated on the pupil support, which holds all of the signal but
 % only pi/4 of the FPA pixels. SNR on the pupil support = kappa * SNR.
 kappa = 4/pi;
@@ -138,7 +138,7 @@ cbIrrUIe ='$|\hat{U}_\mathrm{I}|^2\;(\mathrm{norm.})$';
 % Signal = pupil field directly (FPA in pupil plane)
 U_S_pt_fine = sqrt(m_S_pt)*P_fine/sqrt(mean(abs(P_fine(:)).^2));
 
-[dH_pt_ideal, dH_pt] = record_holograms_pppsrg(U_S_pt_fine, U_R_cell, S, ...
+[dH_pt_ideal, dH_pt] = record_holograms_pppsrg(U_S_pt_fine, U_R_cell, B, ...
     sigma_r, ell, g_AD, nBits, K);
 holoMaxDN_pt = max(dH_pt(:));
 % Binned values sit at pixel centres; register them to the nominal grid
@@ -160,7 +160,7 @@ SNR_pt = snr_theory(m_S_pt, eta_pt);
 % SAME region. U_ref_only is unmasked, so use an unmasked estimate here.
 USe_pt_full = reconstruct_estimate_psrg(dH0_pt/g_AD, ones(N));
 nz_pt = pppsrg_noise_stats(USe_pt_full, U_ref_only, pupilMask);
-psrg_report('Point source', U_S_pt_fine, U_R_cell, S, K, m_S_pt, m_R, holoMaxDN_pt, ...
+psrg_report('Point source', U_S_pt_fine, U_R_cell, B, K, m_S_pt, m_R, holoMaxDN_pt, ...
     nBits, eta_pt, nz_pt, SNR_pt, sigma_PS2, kappa, SF_pt0, SF_pt);
 
 USe_pt_a = align_global_phase(P_coarse, USe_pt, pupilMask);
@@ -198,7 +198,7 @@ U_S_be_fine = sqrt(m_S_be)*U_P_be_fine/sqrt(mean(abs(U_P_be_fine(:)).^2));
 % Coarse for S_F truth
 U_P_be_coarse = U_P_be_fine(1:K:end, 1:K:end);
 
-[dH_be_ideal, dH_be] = record_holograms_pppsrg(U_S_be_fine, U_R_cell, S, ...
+[dH_be_ideal, dH_be] = record_holograms_pppsrg(U_S_be_fine, U_R_cell, B, ...
     sigma_r, ell, g_AD, nBits, K);
 holoMaxDN_be = max(dH_be(:));
 dH_be_ideal = register_pixel_centres(dH_be_ideal, K);
@@ -217,7 +217,7 @@ SNR_be = snr_theory(m_S_be, eta_be);
 
 USe_be_full = reconstruct_estimate_psrg(dH0_be/g_AD, ones(N));
 nz_be = pppsrg_noise_stats(USe_be_full, U_ref_only, pupilMask);
-psrg_report('Bulls-eye', U_S_be_fine, U_R_cell, S, K, m_S_be, m_R, holoMaxDN_be, ...
+psrg_report('Bulls-eye', U_S_be_fine, U_R_cell, B, K, m_S_be, m_R, holoMaxDN_be, ...
     nBits, eta_be, nz_be, SNR_be, sigma_PS2, kappa, SF_be0, SF_be);
 
 USe_be_a = align_global_phase(U_P_be_coarse, USe_be, pupilMask);
@@ -266,7 +266,7 @@ end
 % Local functions
 % ============================================================
 
-function [dH_ideal, dH] = record_holograms_pppsrg(U_S_fine, U_R_cell, S, ...
+function [dH_ideal, dH] = record_holograms_pppsrg(U_S_fine, U_R_cell, B, ...
     sigma_r, ell, g_AD, nBits, K)
     Nfine4 = size(U_S_fine,1);
     Nd     = Nfine4/K;
@@ -274,7 +274,7 @@ function [dH_ideal, dH] = record_holograms_pppsrg(U_S_fine, U_R_cell, S, ...
     dH       = zeros(Nd,Nd,4);
     usePoisson = license('test','statistics_toolbox');
     for kk = 1:4
-        mH_fine = abs(U_S_fine/S + U_R_cell{kk}).^2;
+        mH_fine = abs(U_S_fine/sqrt(B) + U_R_cell{kk}).^2;
         mH = pixel_bin(mH_fine, K);
         if usePoisson
             mHn = double(poissrnd(mH)) + sigma_r*randn(Nd);
@@ -317,21 +317,21 @@ function O = make_bullseye_target_phys(xO, yO, D)
       + double(hypot(xO,yO) <= D/8);
 end
 
-function psrg_report(name,U_S,U_R_cell,S,K,mS,mR,holoMaxDN,nBits,eta,nz,snrClosed,sigma_PS2,kappa,SF0,SF)
+function psrg_report(name,U_S,U_R_cell,B,K,mS,mR,holoMaxDN,nBits,eta,nz,snrClosed,sigma_PS2,kappa,SF0,SF)
 % Standard console block (PRINT_OBJECT_REPORT) for the phase-shifting geometries.
 % Noise and signal are per pixel of the signal estimate [pe^2].
     r.mS = mS;  r.mS_meas = mean(pixel_bin(abs(U_S).^2,K),'all');
     r.mR = mR;  r.mR_meas = mean(pixel_bin(abs(U_R_cell{1}).^2,K),'all');
     mx = 0;
     for kk = 1:numel(U_R_cell)
-        mH = pixel_bin(abs(U_S/S + U_R_cell{kk}).^2,K);
+        mH = pixel_bin(abs(U_S/sqrt(B) + U_R_cell{kk}).^2,K);
         mx = max(mx, max(mH(:)));
     end
     r.holoMaxPe = mx;  r.holoMaxDN = holoMaxDN;  r.maxDN = 2^nBits-1;
     r.eta = eta;
     r.noisePred = sigma_PS2;         r.noiseMeas = nz.varNoise;
     r.nEff      = numel(U_S)/K^2;    % noise stats over the full N x N grid
-    r.sigPred   = eta*mR*mS/S;       r.sigMeas   = nz.signalPower;
+    r.sigPred   = eta*mR*mS/B;       r.sigMeas   = nz.signalPower;
     r.snrClosed = snrClosed;  r.snrNum = nz.SNR;
     r.kappa = kappa;
     r.SF0 = SF0;  r.SF = SF;

@@ -67,7 +67,7 @@ addpath('../functions');
 % Parameters (match the illustrative scripts)
 % ------------------------------------------------------------
 
-N = 256;  K = 2;  q_I = 3;  q_P = 3;  S = 1;
+N = 256;  K = 2;  q_I = 3;  q_P = 3;  B = 1;   % B = amplitude splits (PSRG)
 
 D = 0.30;          wvl = 1.0e-6;
 phi_rms = 1.0;     phaseCorr = D/10;
@@ -143,13 +143,13 @@ G{3} = psrg_geometry('IP-PSRG', sqrt(m_R)*U_R/sqrt(mean(abs(U_R(:)).^2)), q_I, N
 G{4} = psrg_geometry('PP-PSRG', sqrt(m_R)*ones(Nfine), q_P, N);
 
 % Closed-form SNR prefactor: SNR = eta * alpha * m_R * m_S / sigma_n^2
-alpha   = [4*q_I^2/pi, 4*q_P^2/pi, 4/S, 4/S];
+alpha   = [4*q_I^2/pi, 4*q_P^2/pi, 4/B, 4/B];
 % Closed-form S/N -> S/N on the support where each metric is measured
 kappa_P   = [1, 1, 4*q_I^2/pi, 4/pi];                 % pupil support
 kappa_I = [4/pi, 1, 4/pi, (4/pi)*(4*q_P^2/pi)];     % image support W
 
 fprintf('\n%s\n SECTION 7: PERFORMANCE COMPARISON\n%s\n', repmat('=',1,70), repmat('=',1,70));
-fprintf('  N = %d, K = %d, q_I = %.3f, q_P = %.3f, S = %d\n', N, K, q_I, q_P, S);
+fprintf('  N = %d, K = %d, q_I = %.3f, q_P = %.3f, B = %d\n', N, K, q_I, q_P, B);
 fprintf('  D = %.3f m, lambda = %.2e m, z_I = %.4f m, z_P = %.4f m\n', D, wvl, z_I, z_P);
 fprintf('  %d-bit A/D, g_AD = %.4f DN/pe, sigma_n^2 = %.2f pe^2\n', nBits, g_AD, sigma_n2);
 fprintf('  %d SNR points from %.2g to %.2g, %d realizations each\n', ...
@@ -297,7 +297,7 @@ end
 
 if saveResults
     save('../outputs/comparison_results.mat', 'names','SNR_vec','nReals', ...
-        'N','K','q_I','q_P','S','alpha','kappa_P','kappa_I','eta_all', ...
+        'N','K','q_I','q_P','B','alpha','kappa_P','kappa_I','eta_all', ...
         'SF_pt','SNR_pt','SF_be','SNR_be','sat_pt','sat_be','R');
 end
 
