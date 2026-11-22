@@ -17,7 +17,7 @@
 %   - pixel_bin on hologram irradiance -> N×N detector holograms.
 %   - Downsampling of P_fine (every K-th sample) -> N×N pupil truth.
 %   - S_F computed in PUPIL plane between P_coarse and USe.
-%   - Fig 4 images via fft2c of pupil fields (Fourier = image plane).
+%   - Fig 3 (e,f) images via fft2c of pupil fields (Fourier = image plane).
 %   - Reference-only noise estimate from a fifth recording (U_S = 0).
 %
 % All functions are in ../functions/.
@@ -234,7 +234,7 @@ add_zoom_inset(ax_,uPix,uPix,dH0_be_ideal(:,:,3),[-48 -32],[-48 -32],[50 124],[5
 ax_ = show_holo(t3,uPix,uPix,dH0_be(:,:,3),      cH_be,labNx,labNy,cbHoloNPi,'(d)');
 add_zoom_inset(ax_,uPix,uPix,dH0_be(:,:,3),[-48 -32],[-48 -32],[50 124],[50 124]);
 
-% Fig 4: reflectance (a)(b), truth image (c), estimated image (d)
+% Fig 3 (e,f): truth and estimated image-plane irradiance
 % Truth: Fresnel propagate fine-grid pupil -> fine image (Nfine×Nfine)
 U_I_be_fine = fresnel_prop_pupil_to_image(U_P_be_fine, D, delta_f, wvl, z_P);
 Itru = abs(U_I_be_fine).^2;  Itru = Itru/max(Itru(:));

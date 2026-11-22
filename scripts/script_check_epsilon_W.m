@@ -2,7 +2,7 @@
 %
 % Encircled-energy check for Section 7 of "Digital-Holographic Detection."
 %
-% For the bulls-eye (extended) object, Fig. 20(d) shows a constant offset
+% For the bulls-eye (extended) object, Fig. 12(d) shows a constant offset
 % in Delta S/N of about -3.1% (FPA in the image plane) and -4.8% (FPA in
 % the pupil plane). This script tests whether the offset is the fraction
 % of the signal energy that falls outside the image-plane support of
@@ -100,5 +100,5 @@ pr('FPA in image plane, pixel-integrated field',    eps_I_bin);
 pr('FPA in pupil plane, field samples',             eps_P_samp);
 pr('FPA in pupil plane, pixel-integrated field',    eps_P_bin);
 pr('FPA in pupil plane, energy in the W x W crop',  frac_crop);
-fprintf('\n Compare with the Delta S/N offsets in Fig. 20(d):\n');
+fprintf('\n Compare with the Delta S/N offsets in Fig. 12(d):\n');
 fprintf('  about -3.1%% (IPRG, IP-PSRG) and -4.8%% (PPRG, PP-PSRG).\n\n');

@@ -199,7 +199,7 @@ nz_pt = ippsrg_noise_stats(USe_pt, U_ref_only);
 psrg_report('Point source', U_S_pt_fine, U_R_cell, B, K, m_S_pt, m_R, holoMaxDN_pt, ...
     nBits, eta_pt, nz_pt, SNR_pt, sigma_PS2, kappa, SF_pt0, SF_pt);
 
-% Fig 1: holograms and image-plane estimate
+% Fig 1 (a-d): delta = 0 and pi holograms
 fig1 = make_figure(figW,figH3);
 t1   = tiledlayout(fig1,3,2,'TileSpacing','compact','Padding','compact');
 cH_pt = max(abs(dH0_pt_ideal(:,:,[1 3])),[],'all');   % delta = 0 and pi
@@ -213,7 +213,7 @@ add_zoom_inset(ax_,uPix,uPix,dH0_pt_ideal(:,:,3),[-8 8],[-8 8],[40 124],[40 124]
 ax_ = show_holo(t1,uPix,uPix,dH0_pt(:,:,3),      cH_pt,labNx,labNy,cbHoloNPi,'(d)');
 add_zoom_inset(ax_,uPix,uPix,dH0_pt(:,:,3),[-8 8],[-8 8],[40 124],[40 124]);
 
-% Fig 2: pupil truth vs pupil estimate
+% Fig 1 (e,f): pupil truth vs pupil estimate
 U_P_est_pt_a = align_global_phase(P_coarse, U_P_est_pt, pupilMask);
 show_phase(t1,uPup,uPup,P_coarse,         pupilMask,labPx,labPy,cbPhzUP, '(e)');
 show_phase(t1,uPup,uPup,U_P_est_pt_a,     pupilMask,labPx,labPy,cbPhzUPe,'(f)');
@@ -268,7 +268,7 @@ nz_be = ippsrg_noise_stats(USe_be, U_ref_only);
 psrg_report('Bulls-eye', U_S_be_fine, U_R_cell, B, K, m_S_be, m_R, holoMaxDN_be, ...
     nBits, eta_be, nz_be, SNR_be, sigma_PS2, kappa, SF_be0, SF_be);
 
-% Fig 3: bulls-eye holograms and image-plane estimate
+% Fig 3 (a-d): bulls-eye delta = 0 and pi holograms
 fig3 = make_figure(figW,figH3);
 t3   = tiledlayout(fig3,3,2,'TileSpacing','compact','Padding','compact');
 cH_be = max(abs(dH0_be_ideal(:,:,[1 3])),[],'all');   % delta = 0 and pi
@@ -282,7 +282,7 @@ add_zoom_inset(ax_,uPix,uPix,dH0_be_ideal(:,:,3),[-48 -32],[-48 -32],[50 124],[5
 ax_ = show_holo(t3,uPix,uPix,dH0_be(:,:,3),      cH_be,labNx,labNy,cbHoloNPi,'(d)');
 add_zoom_inset(ax_,uPix,uPix,dH0_be(:,:,3),[-48 -32],[-48 -32],[50 124],[50 124]);
 
-% Fig 4: reflectance (a)(b), truth irradiance (c), estimated irradiance (d)
+% Fig 3 (e,f): truth and estimated image-plane irradiance
 Itru = abs(U_I_be_fine).^2;        Itru = Itru/max(Itru(:));
 Iest = abs(USe_be_disp).^2;        Iest = Iest/max(Iest(:));
 objMask = double(O_fine ~= 0);

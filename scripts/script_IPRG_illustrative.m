@@ -1,7 +1,7 @@
 % ============================================================
 % script_IPRG_illustrative.m
 %
-% Illustrative examples for the off-axis IPRG (Section 4.5).
+% Illustrative examples for the off-axis IPRG (Section 4.6).
 %
 % Produces two figures (3x2), saved as IPRG_pt and IPRG_bulls:
 %   Figure 1: point-source (a),(b) holograms, (c),(d) Fourier plane,
@@ -114,7 +114,7 @@ colIndex = (sbCol-N/2):(sbCol+N/2-1);
 [cwX,cwY] = meshgrid(linspace(-(N-1)/2,(N-1)/2,N),linspace(-(N-1)/2,(N-1)/2,N));
 circWin   = hypot(cwX,cwY) <= (N-1)/2;
 
-% Closed-form SNR (Eq. 67 form); eta from PIXEL_ETA on the cross term
+% Closed-form SNR (Eq. 45); eta from PIXEL_ETA on the cross term
 snr_theory    = @(mS,eta) eta*(4*q_I^2/pi)*m_R*mS/sigma_n2;
 sigma_n2_full = @(mS) mS + sigma_n2;
 

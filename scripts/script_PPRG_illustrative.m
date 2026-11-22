@@ -1,7 +1,7 @@
 % ============================================================
 % script_PPRG_illustrative.m
 %
-% Illustrative examples for the off-axis PPRG (Section 5.5).
+% Illustrative examples for the off-axis PPRG (Section 5.6).
 %
 % Produces two figures (3x2), saved as PPRG_pt and PPRG_bulls:
 %   Figure 1: point-source (a),(b) holograms, (c),(d) Fourier plane,
@@ -10,10 +10,10 @@
 %             (e),(f) truth vs. estimated image-plane irradiance
 %
 % Axis conventions:
-%   pupil plane (FPA):   x_1/p,  y_1/p  (Figs 1,3 a-b)
-%   Fourier plane:       x_1/D,  y_1/D  (Figs 1,3 c-f)
-%   pupil plane:         x_1/D,  y_1/D  (Fig 2)
-%   image plane:         x/W,    y/W    (Fig 4)
+%   pupil plane (FPA):   x_1/p,  y_1/p  (Figs 1,3 a,b)
+%   Fourier plane:       x_2/W,  y_2/W  (Figs 1,3 c,d)
+%   pupil plane:         x_1/D,  y_1/D  (Fig 1 e,f)
+%   image plane:         x/W,    y/W    (Fig 3 e,f)
 %
 % All functions are in ../functions/.
 % Figures and results are saved to ../outputs/.
@@ -252,12 +252,12 @@ nz_b = ref_noise_stats(UIe_b,UIe_ref,circWin,M);
 offaxis_report('Bulls-eye',U_S_be_fine,U_R_fine,K,m_S_bars,m_R,mH_b,holoMaxDN_b, ...
     nBits,eta_b,nz_b,SNR_b,sigma_n2_full(m_S_bars),q_P,N,SF_b0,SF_b);
 
-% Fig 4(c): truth image — Fresnel prop fine pupil to fine image plane
+% Fig 3(e): truth image — Fresnel prop fine pupil to fine image plane
 U_I_tru_fine = fresnel_prop_pupil_to_image(U_P_be_fine,D,delta_f,wvl,z_P);
 Itru = abs(U_I_tru_fine).^2;  Itru = Itru/max(Itru(:));
 uObj_fine = (-Nfine/2:Nfine/2-1)*delta_f/D;
 
-% Fig 4(d): estimated image — |UIe_b|^2 (UIe_b is N×N image-plane estimate)
+% Fig 3(f): estimated image — |UIe_b|^2 (UIe_b is N×N image-plane estimate)
 Iest = abs(UIe_b).^2;  Iest = Iest/max(Iest(:));
 uObj_est = uIe;   % same N×N axis as Fig 1/3 (e,f)
 
