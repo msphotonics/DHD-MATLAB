@@ -1,7 +1,7 @@
 % ============================================================
 % script_PPPSRG_illustrative.m
 %
-% Illustrative examples for the on-axis PP-PSRG (Section 6.5).
+% Illustrative examples for the on-axis PP-PSRG (Section 6.6).
 % (Pupil-Plane Phase-Shifting Recording Geometry)
 %
 % Produces two figures (3x2), saved as PPPSRG_pt and PPPSRG_bulls:

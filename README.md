@@ -33,8 +33,8 @@ to `../outputs/`.
 |---|---|---|---|---|
 | `script_IPRG_illustrative.m` | Section 4.6 | Off-axis IPRG | Image plane | `IPRG_*` |
 | `script_PPRG_illustrative.m` | Section 5.6 | Off-axis PPRG | Pupil plane | `PPRG_*` |
-| `script_PPPSRG_illustrative.m` | Section 6.5 | On-axis PSRG | Pupil plane | `PPPSRG_*` |
-| `script_IPPSRG_illustrative.m` | Section 6.5 | On-axis PSRG | Image plane | `IPPSRG_*` |
+| `script_PPPSRG_illustrative.m` | Section 6.6 | On-axis PSRG | Pupil plane | `PPPSRG_*` |
+| `script_IPPSRG_illustrative.m` | Section 6.6 | On-axis PSRG | Image plane | `IPPSRG_*` |
 | `script_comparison.m` | Section 7 | All four | Both | `comparison_2x2` |
 | `script_truth_fields.m` | Appendix C | All four | — | `truth_fields` |
 | `script_check_epsilon_W.m` | Section 7 | All four | Both | none (prints the encircled-energy check) |
