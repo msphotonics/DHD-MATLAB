@@ -60,6 +60,20 @@ The `functions` folder holds the shared helpers:
 - **Reporting and plotting:** `print_run_header`, `print_object_report`,
   `make_figure`, `show_*`, `add_zoom_inset`, `centered_indices`
 
+## Viewing the PDFs on macOS
+
+MATLAB's vector PDF export draws each image as a tiling pattern, which
+macOS Preview and other Apple PDF viewers can render with an offset (the
+images and colorbars appear wrapped). Adobe Acrobat and most other viewers
+render them correctly. To make a PDF that renders correctly everywhere, run
+
+```
+python tools/fix_pdf_patterns.py outputs/IPRG_pt.pdf outputs/IPRG_pt_fixed.pdf
+```
+
+The script requires Python and `pypdf` (`pip install pypdf`). It keeps the
+same image pixels and only changes how the PDF draws them.
+
 ## Requirements
 
 - MATLAB R2020b or later (`tiledlayout`, `exportgraphics`).
